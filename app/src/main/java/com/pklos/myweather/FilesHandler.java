@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Scanner;
 
 public class FilesHandler {
     Context _context;
@@ -58,5 +60,28 @@ public class FilesHandler {
         Log.d("FilesHandler", path);
         File file = new File(path);
         return file.exists();
+    }
+
+    public static String readerToString(Reader reader){
+//        BufferedReader in = new BufferedReader(reader);
+//        String line = null;
+//        StringBuilder rslt = new StringBuilder();
+//        while ((line = in.readLine()) != null) {
+//            rslt.append(line);
+//        }
+        String text = new Scanner(reader).useDelimiter("\\Z").next();
+        return text;
+    }
+
+    public static String readerToString2(Reader reader) throws IOException{
+        char[] arr = new char[8*1024]; // 8K at a time
+        StringBuffer buf = new StringBuffer();
+        int numChars;
+
+        while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
+            buf.append(arr, 0, numChars);
+        }
+
+        return buf.toString();
     }
 }

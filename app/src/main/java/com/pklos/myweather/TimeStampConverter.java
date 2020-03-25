@@ -12,7 +12,7 @@ public class TimeStampConverter {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp*1000L);
         final String timeString =
-                new SimpleDateFormat("HH:mm:ss:SSS").format(cal.getTime());
+                new SimpleDateFormat("HH:mm").format(cal.getTime());
 
         return timeString;
     }
