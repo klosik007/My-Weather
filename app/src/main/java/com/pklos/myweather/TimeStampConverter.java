@@ -1,18 +1,17 @@
 package com.pklos.myweather;
 
-import android.annotation.SuppressLint;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class TimeStampConverter {
+    private static String _pattern = "HH:ss";
+    public static void setPattern(String pattern) { _pattern = pattern; }
+
     static String ConvertTimeStampToDate(long timestamp){
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp*1000L);
         final String timeString =
-                new SimpleDateFormat("HH:mm").format(cal.getTime());
+                new SimpleDateFormat(_pattern).format(cal.getTime());
 
         return timeString;
     }
