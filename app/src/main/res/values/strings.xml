@@ -4,8 +4,25 @@
     <string name="weather_forecast">Forecast</string>
     <string name="nav_home">Home</string>
     <string name="settings">Settings</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
     <string name="more_info">More Info</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_deg">Wind Degree</string>
+    <string name="Visibility">Visibility</string>
+    <string name="maxTempView">Max. Temp</string>
+    <string name="maxTemp">max_temp</string>
+    <string name="minTempView">Min. Temp</string>
+    <string name="minTemp">min_temp</string>
     <string name="current_temp">Temperature</string>
     <string name="feel_temp">Feels like</string>
-    <string name="time_stamp">Time From</string>
+    <string name="time_stamp">Update time:</string>
+    <string name="main_description">Main Descript</string>
+    <string name="adv_description">Adv Descript</string>
+    <string name="image_content_description">weather_img</string>
+    <string name="time">time</string>
+    <string name="feel">feel</string>
+    <string name="temp">temp</string>
 </resources>
