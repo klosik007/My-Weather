@@ -1,13 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/more_info"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/city"
+        android:textSize="50sp" />
+
+    <ImageView
+        android:id="@+id/sun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="64dp"
+        app:srcCompat="@drawable/ic_wb_sunny_black_24dp" />
+
+    <TextView
+        android:id="@+id/sunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_name"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="64dp"
+        android:layout_toEndOf="@+id/sun"
+        android:layout_toRightOf="@+id/sun"
+        android:text="@string/sunrise"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/sunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sunrise"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/sun"
+        android:layout_toRightOf="@+id/sun"
+        android:text="@string/sunset"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_name"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="64dp"
+        android:layout_toEndOf="@+id/sunrise"
+        android:layout_toRightOf="@+id/sunrise"
+        app:srcCompat="@drawable/ic_vertical_align_bottom_black_24dp" />
+
+    <TextView
+        android:id="@+id/pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_name"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="64dp"
+        android:layout_toEndOf="@+id/imageView3"
+        android:layout_toRightOf="@+id/imageView3"
+        android:text="@string/pressure"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pressure"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="61dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/imageView3"
+        android:layout_toRightOf="@+id/imageView3"
+        android:text="@string/humidity"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/windSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sun"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="72dp"
+        android:layout_toEndOf="@+id/imageView4"
+        android:layout_toRightOf="@+id/imageView4"
+        android:text="@string/wind_speed"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sun"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="72dp"
+        app:srcCompat="@drawable/ic_wind_speed_8_12_595b40b85ba036ed117da617" />
+
+    <TextView
+        android:id="@+id/wind_deg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/windSpeed"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/imageView4"
+        android:layout_toRightOf="@+id/imageView4"
+        android:text="@string/wind_deg"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView3"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="72dp"
+        android:layout_toEndOf="@+id/wind_deg"
+        android:layout_toRightOf="@+id/wind_deg"
+        app:srcCompat="@drawable/ic_symbol_ice_fog_wmo" />
+
+    <TextView
+        android:id="@+id/visibility_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView3"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="72dp"
+        android:layout_toEndOf="@+id/imageView5"
+        android:layout_toRightOf="@+id/imageView5"
+        android:text="@string/Visibility"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/visibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/visibility_view"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/imageView5"
+        android:layout_toRightOf="@+id/imageView5"
+        android:text="vis"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:id="@+id/maxTempAsset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView4"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="72dp"
+        app:srcCompat="@drawable/ic_high_temperature"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:id="@+id/minTempAsset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView5"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginBottom="345dp"
+        android:layout_toEndOf="@+id/maxTempView"
+        android:layout_toRightOf="@+id/maxTempView"
+        app:srcCompat="@drawable/ic_low_temperature" />
+
+    <TextView
+        android:id="@+id/maxTempView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView4"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="72dp"
+        android:layout_toEndOf="@+id/maxTempAsset"
+        android:layout_toRightOf="@+id/maxTempAsset"
+        android:text="@string/maxTempView"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tempMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/maxTempView"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/maxTempAsset"
+        android:layout_toRightOf="@+id/maxTempAsset"
+        android:text="@string/maxTemp"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/minTempView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView5"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="72dp"
+        android:layout_toEndOf="@+id/minTempAsset"
+        android:layout_toRightOf="@+id/minTempAsset"
+        android:text="@string/minTempView"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tempMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/minTempView"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/minTempAsset"
+        android:layout_toRightOf="@+id/minTempAsset"
+        android:text="@string/minTemp"
+        android:textSize="12sp"/>
 </RelativeLayout>
