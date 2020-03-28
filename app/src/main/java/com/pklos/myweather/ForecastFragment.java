@@ -1,11 +1,15 @@
 package com.pklos.myweather;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -14,16 +18,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastFragment extends Fragment {
-    TextView daytime;
-    TextView temp;
-    TextView precipitation;
-
     List<Long> dts;
     List<Double> temps;
     List<Double> precisRain;
@@ -35,81 +36,55 @@ public class ForecastFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_forecast, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.layout);
-        TableLayout forecastTable = (TableLayout)view.findViewById(R.id.forecastTable);
         dts = MainActivity.getDtList();
         temps = MainActivity.getTempsList();
-        int tableColNum = 3;
-        int tableRowNum = 3;
+        int tableRowNumber = dts.size();
+        int tableColumnNumber = 1;
 
-        TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-        //forecastTable.setLayoutParams(tableParams);
+        TableLayout table = new TableLayout(getContext());
+        TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        TableRow.LayoutParams tableRowsParams = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        TableRow tblRow = new TableRow(getContext());
-        tblRow.setLayoutParams(rowParams);
+        tableParams.setMargins(10, 50, 5,5);
+        table.setStretchAllColumns(true);
+        TimeStampConverter.setPattern("dd.MM HH:ss");
 
-        TextView label_date = new TextView(getContext());
-        label_date.setLayoutParams(rowParams);
-        label_date.setText("HELLO");
-        label_date.setTextColor(Color.WHITE);          // part2
-        label_date.setPadding(5, 5, 5, 5);
-        tblRow.addView(label_date);// add the column to the table row here
+        for(int tableRowId = 0; tableRowId < tableRowNumber; tableRowId++) {
+            TableRow tableRow = new TableRow(getContext());
 
-        TextView label_temp = new TextView(getContext());    // part3
-                label_temp.setText("ANDROID..!!"); // set the text for the header
-                label_temp.setTextColor(Color.WHITE); // set the color
-                label_temp.setPadding(5, 5, 5, 5); // set the padding (if required)
-                tblRow.addView(label_temp); // add the column to the table row here
+            for(int tableColId = 0; tableColId < tableColumnNumber; tableColId++) {
+                TextView date = new TextView(getContext());
+                date.setText(TimeStampConverter.ConvertTimeStampToDate(dts.get(tableRowId)));
+                date.setTextColor(Color.BLACK);          // part2
+                date.setPadding(5, 5, 5, 5);
+                date.setGravity(11); //11 - center
+                date.setTextAppearance(android.R.style.TextAppearance_Large);
+                tableRow.addView(date, tableRowsParams);// add the column to the table row here
 
-                TextView label_precip = new TextView(getContext());    // part3
-                label_precip.setText("PREC"); // set the text for the header
-                label_precip.setTextColor(Color.WHITE); // set the color
-                label_precip.setPadding(5, 5, 5, 5); // set the padding (if required)
-                tblRow.addView(label_precip); // add the column to the table row here
+                TextView temp = new TextView(getContext());    // part3
+                int tempVal =  (int)(Math.round(temps.get(tableRowId) - 273.15));
+                temp.setText(String.valueOf(tempVal)); // set the text for the header
+                temp.setTextColor(Color.BLACK); // set the color
+                temp.setPadding(5, 5, 5, 5); // set the padding (if required)
+                temp.setGravity(11); //11 - center
+                temp.setTextAppearance(android.R.style.TextAppearance_Large);
+                tableRow.addView(temp, tableRowsParams); // add the column to the table row here
 
-        forecastTable.addView(tblRow, new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.WRAP_CONTENT,                    //part4
-                TableLayout.LayoutParams.WRAP_CONTENT));
-
-//        for(int tableRowId = 1; tableRowId < tableRowNum; tableRowId++)
-//        {
-//            TableRow tblRowVar = new TableRow(getContext());
-//            tblRowVar.setId(tableRowId);
-//            tblRowVar.setLayoutParams(new TableRow.LayoutParams(
-//                    TableRow.LayoutParams.MATCH_PARENT,
-//                    TableRow.LayoutParams.WRAP_CONTENT));
-//            for(int tblColIdxVar = 0; tblColIdxVar < tableColNum; tblColIdxVar++)
-//            {
-//                TextView label_date = new TextView(getContext());
-//                label_date.setText("HELLO");
-//                label_date.setTextColor(Color.WHITE);          // part2
-//                label_date.setPadding(5, 5, 5, 5);
-//                tblRowVar.addView(label_date);// add the column to the table row here
-//
-//                TextView label_temp = new TextView(getContext());    // part3
-//                label_temp.setText("ANDROID..!!"); // set the text for the header
-//                label_temp.setTextColor(Color.WHITE); // set the color
-//                label_temp.setPadding(5, 5, 5, 5); // set the padding (if required)
-//                tblRowVar.addView(label_temp); // add the column to the table row here
-//
-//                TextView label_precip = new TextView(getContext());    // part3
-//                label_precip.setText("PREC"); // set the text for the header
-//                label_precip.setTextColor(Color.WHITE); // set the color
-//                label_precip.setPadding(5, 5, 5, 5); // set the padding (if required)
-//                tblRowVar.addView(label_precip); // add the column to the table row here
-//            }
-//            forecastTable.addView(tblRowVar, new TableLayout.LayoutParams(
-//                    TableLayout.LayoutParams.WRAP_CONTENT,                    //part4
-//                    TableLayout.LayoutParams.WRAP_CONTENT));
-//        }
-//        precisRain = MainActivity.getRainPrepsList();
-//        precisSnow = MainActivity.getSnowPrepsList();
-//        for (Long dt : dts){
-//            Log.d("dt", String.valueOf(dt));
-//        }
-
+                TextView precip = new TextView(getContext());    // part3
+                precip.setText("0.0"); // set the text for the header
+                precip.setTextColor(Color.BLACK); // set the color
+                precip.setPadding(5, 5, 5, 5); // set the padding (if required)
+                precip.setGravity(11); //11 - center
+                precip.setTextAppearance(android.R.style.TextAppearance_Large);
+                tableRow.addView(precip, tableRowsParams); // add the column to the table row here
+            }
+            table.addView(tableRow, tableParams);
+        }
+        table.setLayoutParams(tableParams);
+        layout.addView(table);
     }
 }
