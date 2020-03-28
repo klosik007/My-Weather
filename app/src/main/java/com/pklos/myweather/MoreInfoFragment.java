@@ -52,6 +52,7 @@ public class MoreInfoFragment extends Fragment {
         visibilityText = (TextView) view.findViewById(R.id.visibility);
         tempMaxText = (TextView) view.findViewById(R.id.tempMax);
         tempMinText = (TextView) view.findViewById(R.id.tempMin);
+        TimeStampConverter.setPattern("HH:ss");
 
         cityName = MainActivity.getCityName();
         cityText.setText(cityName);
