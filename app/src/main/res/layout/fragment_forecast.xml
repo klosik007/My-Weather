@@ -10,11 +10,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/forecastChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             />
+
         <TableLayout
             android:id="@+id/forecastTable"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:layout_marginTop="300dp"
             android:stretchColumns="0,1,2">
 
             <TableRow
