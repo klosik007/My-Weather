@@ -21,14 +21,27 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastFragment extends Fragment {
-    List<Long> dts;
-    List<Double> temps;
-    List<Double> precisRain;
-    List<Double> precisSnow;
+    private List<Long> dts;
+    private List<Double> temps;
+    private List<Double> precisRain;
+    private List<Double> precisSnow;
+
+    private CombinedChart chart;
+    private final int dataPeriod = 40;//every 3 hours, total amount 120 hours, 5 days
 
     @Nullable
     @Override
@@ -42,6 +55,57 @@ public class ForecastFragment extends Fragment {
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.layout);
         dts = MainActivity.getDtList();
         temps = MainActivity.getTempsList();
+
+        //CHART
+        chart = (CombinedChart)view.findViewById(R.id.forecastChart);
+        chart.getDescription().setText("Forecast");
+        chart.setBackgroundColor(Color.WHITE);
+        chart.setDrawGridBackground(false);
+        chart.setDrawBarShadow(false);
+        chart.setDrawOrder(new CombinedChart.DrawOrder[]{
+                CombinedChart.DrawOrder.BAR,
+//                CombinedChart.DrawOrder.BUBBLE,
+//                CombinedChart.DrawOrder.CANDLE,
+                CombinedChart.DrawOrder.LINE,
+//                CombinedChart.DrawOrder.SCATTER
+        });
+
+        Legend legend = chart.getLegend();
+        legend.setWordWrapEnabled(true);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setAxisMinimum(0f);
+
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setAxisMinimum(0f);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setGranularity(0.5f);
+//        xAxis.setValueFormatter(new ValueFormatter() {
+//            @Override
+//            public String getFormattedValue(float value) {
+//                return super.getFormattedValue(value);
+//            }
+//        });
+
+        CombinedData data = new CombinedData();
+        data.setData(precipitationData());//BarData
+        data.setData(tempsData());//LineData
+
+        xAxis.setAxisMaximum(data.getXMax() + 0.2f);
+
+        chart.setData(data);
+        chart.invalidate();
+
+        //TABLE
         int tableRowNumber = dts.size();
         int tableColumnNumber = 1;
 
@@ -49,7 +113,7 @@ public class ForecastFragment extends Fragment {
         TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TableRow.LayoutParams tableRowsParams = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        tableParams.setMargins(10, 50, 5,5);
+        tableParams.setMargins(10, 350, 5,5);
         table.setStretchAllColumns(true);
         TimeStampConverter.setPattern("dd.MM HH:ss");
 
@@ -86,5 +150,17 @@ public class ForecastFragment extends Fragment {
         }
         table.setLayoutParams(tableParams);
         layout.addView(table);
+    }
+
+    private BarData precipitationData(){
+        BarData preps = new BarData();
+
+        return preps;
+    }
+
+    private LineData tempsData(){
+        LineData temps = new LineData();
+
+        return temps;
     }
 }
