@@ -13,12 +13,11 @@
         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/forecastChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
+            android:layout_height="300dp" />
 
         <TableLayout
             android:id="@+id/forecastTable"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_marginTop="300dp"
