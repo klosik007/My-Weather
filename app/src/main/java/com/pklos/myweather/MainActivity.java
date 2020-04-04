@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private static int _pressure = 0;
     private static int _humidity = 0;
     private static int _visibility = 0;
-    private static List<Long> _dayTimes = new ArrayList<>();
-    private static List<Double> _temps = new ArrayList<>();
-    private static List<Double> _rainPreps = new ArrayList<>();
-    private static List<Double> _snowPreps = new ArrayList<>();
+    private static ArrayList<Long> _dayTimes = new ArrayList<>();
+    private static ArrayList<Double> _temps = new ArrayList<>();
+    private static ArrayList<Double> _rainPreps = new ArrayList<>();
+    private static ArrayList<Double> _snowPreps = new ArrayList<>();
 
     private String fiveDaysForecast = "http://api.openweathermap.org/data/2.5/forecast?id=7531002&appid=50768df1f9a4be14d70a612605801e5c";
     private String currentForecast = "http://api.openweathermap.org/data/2.5/weather?id=7531002&appid=50768df1f9a4be14d70a612605801e5c";
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
     public static int getPressure() { return _pressure; }
     public static int getHumidity() { return _humidity; }
     public static int getVisibility() { return _visibility; }
-    public static List<Long> getDtList() { return _dayTimes; }
-    public static List<Double> getTempsList() { return _temps; }
-    public static List<Double> getRainPrepsList() { return _rainPreps; }
-    public static List<Double> getSnowPrepsList() { return _snowPreps; }
+    public static ArrayList<Long> getDtList() { return _dayTimes; }
+    public static ArrayList<Double> getTempsList() { return _temps; }
+    public static ArrayList<Double> getRainPrepsList() { return _rainPreps; }
+    public static ArrayList<Double> getSnowPrepsList() { return _snowPreps; }
 
     public static void setCityName(String city) { _city = city; }
     public static void setTemperature(double temp) { _temp = temp; }
@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
     public static void setPressure(int pressure) { _pressure = pressure; }
     public static void setHumidity(int humidity) { _humidity = humidity; }
     public static void setVisibility(int visibility) { _visibility = visibility; }
-    public static void setDtList(List<Long> dts) { _dayTimes = dts; }
-    public static void setTempsList(List<Double> temps) { _temps = temps; }
-    public static void setRainPrepList(List<Double> rainPreps) { _rainPreps = rainPreps; }
-    public static void setSnowPrepList(List<Double> snowPreps) { _snowPreps = snowPreps; }
+    public static void setDtList(ArrayList<Long> dts) { _dayTimes = dts; }
+    public static void setTempsList(ArrayList<Double> temps) { _temps = temps; }
+    public static void setRainPrepList(ArrayList<Double> rainPreps) { _rainPreps = rainPreps; }
+    public static void setSnowPrepList(ArrayList<Double> snowPreps) { _snowPreps = snowPreps; }
 
     public void transactFragment(Fragment fragment, boolean reload) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -204,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("ddd", "gson");
 
                 List<_List> forecastList = response.list;
-                List<Long> dayTime = new ArrayList<>();
-                List<Double> temps = new ArrayList<>();
-                List<Double> rainPrep = new ArrayList<>();
-                List<Double> snowPrep = new ArrayList<>();
+                ArrayList<Long> dayTime = new ArrayList<>();
+                ArrayList<Double> temps = new ArrayList<>();
+                ArrayList<Double> rainPrep = new ArrayList<>();
+                ArrayList<Double> snowPrep = new ArrayList<>();
 
                 for (_List weather : forecastList){
                     dayTime.add(weather.dt);
