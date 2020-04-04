@@ -28,17 +28,20 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ForecastFragment extends Fragment {
-    private List<Long> dts;
-    private List<Double> temps;
-    private List<Double> precisRain;
-    private List<Double> precisSnow;
+    private ArrayList<Long> dts;
+    private ArrayList<Double> temps;
+    private ArrayList<Double> precisRain;
+    private ArrayList<Double> precisSnow;
 
     private CombinedChart chart;
     private final int dataPeriod = 40;//every 3 hours, total amount 120 hours, 5 days
@@ -55,6 +58,12 @@ public class ForecastFragment extends Fragment {
         RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.layout);
         dts = MainActivity.getDtList();
         temps = MainActivity.getTempsList();
+
+        ArrayList<String> dtsLabels = new ArrayList<>();
+        TimeStampConverter.setPattern("dd.MM HH:ss");
+        for (Long dt : dts){
+            dtsLabels.add(TimeStampConverter.ConvertTimeStampToDate(dt));
+        }
 
         //CHART
         chart = (CombinedChart)view.findViewById(R.id.forecastChart);
@@ -89,15 +98,17 @@ public class ForecastFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(0.5f);
-//        xAxis.setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value) {
-//                return super.getFormattedValue(value);
-//            }
-//        });
+        //x axis labels for chart
+        final String[] xAxisLabels = dtsLabels.toArray(new String[dtsLabels.size()]);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {//xAxis labels
+                return xAxisLabels[(int)value];
+            }
+        });
 
         CombinedData data = new CombinedData();
-        data.setData(precipitationData());//BarData
+        //data.setData(precipitationData());//BarData
         data.setData(tempsData());//LineData
 
         xAxis.setAxisMaximum(data.getXMax() + 0.2f);
@@ -109,47 +120,44 @@ public class ForecastFragment extends Fragment {
         int tableRowNumber = dts.size();
         int tableColumnNumber = 1;
 
-        TableLayout table = new TableLayout(getContext());
+        TableLayout table = (TableLayout)view.findViewById(R.id.forecastTable);
         TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TableRow.LayoutParams tableRowsParams = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        tableParams.setMargins(10, 350, 5,5);
+        tableParams.setMargins(30, 10, 5,5);
         table.setStretchAllColumns(true);
-        TimeStampConverter.setPattern("dd.MM HH:ss");
 
         for(int tableRowId = 0; tableRowId < tableRowNumber; tableRowId++) {
             TableRow tableRow = new TableRow(getContext());
 
             for(int tableColId = 0; tableColId < tableColumnNumber; tableColId++) {
                 TextView date = new TextView(getContext());
-                date.setText(TimeStampConverter.ConvertTimeStampToDate(dts.get(tableRowId)));
-                date.setTextColor(Color.BLACK);          // part2
+                date.setText(dtsLabels.get(tableRowId));
+                date.setTextColor(Color.BLACK);
                 date.setPadding(5, 5, 5, 5);
                 date.setGravity(11); //11 - center
                 date.setTextAppearance(android.R.style.TextAppearance_Large);
-                tableRow.addView(date, tableRowsParams);// add the column to the table row here
+                tableRow.addView(date, tableRowsParams);
 
-                TextView temp = new TextView(getContext());    // part3
+                TextView temp = new TextView(getContext());
                 int tempVal =  (int)(Math.round(temps.get(tableRowId) - 273.15));
-                temp.setText(String.valueOf(tempVal)); // set the text for the header
-                temp.setTextColor(Color.BLACK); // set the color
-                temp.setPadding(5, 5, 5, 5); // set the padding (if required)
-                temp.setGravity(11); //11 - center
+                temp.setText(String.valueOf(tempVal));
+                temp.setTextColor(Color.BLACK);
+                temp.setPadding(5, 5, 5, 5);
+                temp.setGravity(11);
                 temp.setTextAppearance(android.R.style.TextAppearance_Large);
-                tableRow.addView(temp, tableRowsParams); // add the column to the table row here
+                tableRow.addView(temp, tableRowsParams);
 
-                TextView precip = new TextView(getContext());    // part3
-                precip.setText("0.0"); // set the text for the header
-                precip.setTextColor(Color.BLACK); // set the color
-                precip.setPadding(5, 5, 5, 5); // set the padding (if required)
-                precip.setGravity(11); //11 - center
+                TextView precip = new TextView(getContext());
+                precip.setText("0.0");
+                precip.setTextColor(Color.BLACK);
+                precip.setPadding(5, 5, 5, 5);
+                precip.setGravity(11);
                 precip.setTextAppearance(android.R.style.TextAppearance_Large);
-                tableRow.addView(precip, tableRowsParams); // add the column to the table row here
+                tableRow.addView(precip, tableRowsParams);
             }
             table.addView(tableRow, tableParams);
         }
-        table.setLayoutParams(tableParams);
-        layout.addView(table);
     }
 
     private BarData precipitationData(){
@@ -159,8 +167,28 @@ public class ForecastFragment extends Fragment {
     }
 
     private LineData tempsData(){
-        LineData temps = new LineData();
+        LineData tempsLineData = new LineData();
 
-        return temps;
+        ArrayList<Entry> entries = new ArrayList<>();
+        for(int index = 0; index < dataPeriod; index++){
+            entries.add(new Entry(index + 0.4f,  Math.round(temps.get(index)-273.15f)));
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Temperatures");
+        dataSet.setColor(Color.BLUE);
+        dataSet.setLineWidth(3.0f);
+        dataSet.setCircleColor(Color.BLUE);
+        dataSet.setCircleRadius(4f);
+        dataSet.setFillColor(Color.BLUE);
+        dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        dataSet.setDrawValues(true);
+        dataSet.setValueTextSize(9f);
+        dataSet.setValueTextColor(Color.BLUE);
+
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+        tempsLineData.addDataSet(dataSet);
+
+        return tempsLineData;
     }
 }
