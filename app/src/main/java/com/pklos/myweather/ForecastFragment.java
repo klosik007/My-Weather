@@ -26,6 +26,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
@@ -55,9 +56,10 @@ public class ForecastFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.layout);
         dts = MainActivity.getDtList();
         temps = MainActivity.getTempsList();
+        precisRain = MainActivity.getRainPrepsList();
+        precisSnow = MainActivity.getSnowPrepsList();
 
         ArrayList<String> dtsLabels = new ArrayList<>();
         TimeStampConverter.setPattern("dd.MM HH:ss");
@@ -86,13 +88,16 @@ public class ForecastFragment extends Fragment {
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
 
+        float minTemp = Collections.min(temps).floatValue() - 273.15f;
+        float minPrep = Math.min(Collections.min(precisRain).floatValue(), Collections.min(precisSnow).floatValue());
+
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMinimum(minTemp);
 
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setAxisMinimum(0f);
+        rightAxis.setAxisMinimum(minPrep);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -108,7 +113,7 @@ public class ForecastFragment extends Fragment {
         });
 
         CombinedData data = new CombinedData();
-        //data.setData(precipitationData());//BarData
+        data.setData(precipitationData());//BarData
         data.setData(tempsData());//LineData
 
         xAxis.setAxisMaximum(data.getXMax() + 0.2f);
@@ -149,7 +154,8 @@ public class ForecastFragment extends Fragment {
                 tableRow.addView(temp, tableRowsParams);
 
                 TextView precip = new TextView(getContext());
-                precip.setText("0.0");
+                Double precipVal = precisRain.get(tableRowId) + precisSnow.get(tableRowId);
+                precip.setText(String.valueOf(precipVal));
                 precip.setTextColor(Color.BLACK);
                 precip.setPadding(5, 5, 5, 5);
                 precip.setGravity(11);
@@ -161,7 +167,23 @@ public class ForecastFragment extends Fragment {
     }
 
     private BarData precipitationData(){
-        BarData preps = new BarData();
+        ArrayList<BarEntry> entries = new ArrayList<>();
+
+        for (int i = 0; i < dataPeriod; i++){
+            float precipitation = precisRain.get(i).floatValue() + precisSnow.get(i).floatValue();
+            entries.add(new BarEntry(0, precipitation));
+        }
+
+        BarDataSet set = new BarDataSet(entries, "Precipitation");
+        set.setColor(Color.BLACK);
+        set.setValueTextColor(Color.BLACK);
+        set.setValueTextSize(8.0f);
+        set.setAxisDependency(YAxis.AxisDependency.RIGHT);
+
+        float barWidth = 0.7f;
+
+        BarData preps = new BarData(set);
+        preps.setBarWidth(barWidth);
 
         return preps;
     }
@@ -171,18 +193,18 @@ public class ForecastFragment extends Fragment {
 
         ArrayList<Entry> entries = new ArrayList<>();
         for(int index = 0; index < dataPeriod; index++){
-            entries.add(new Entry(index + 0.4f,  Math.round(temps.get(index)-273.15f)));
+            entries.add(new Entry(index + 0.5f,  Math.round(temps.get(index) - 273.15f)));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Temperatures");
         dataSet.setColor(Color.BLUE);
         dataSet.setLineWidth(3.0f);
         dataSet.setCircleColor(Color.BLUE);
-        dataSet.setCircleRadius(4f);
+        dataSet.setCircleRadius(5.0f);
         dataSet.setFillColor(Color.BLUE);
         dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
         dataSet.setDrawValues(true);
-        dataSet.setValueTextSize(9f);
+        dataSet.setValueTextSize(8.0f);
         dataSet.setValueTextColor(Color.BLUE);
 
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
