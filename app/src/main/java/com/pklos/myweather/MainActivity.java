@@ -212,16 +212,16 @@ public class MainActivity extends AppCompatActivity {
                 for (_List weather : forecastList){
                     dayTime.add(weather.dt);
                     temps.add(weather.main.temp);
-//                    Double rain = (weather.rain.rainPrep == null) ? 0.0 : weather.rain.rainPrep;
-//                    Double snow = (weather.snow.snowPrep == null) ? 0.0 : weather.snow.snowPrep;
-//                    rainPrep.add(rain);
-//                    snowPrep.add(snow);
+                    Double rain = weather.rain != null ? weather.rain.rainPrep : 0.0;
+                    Double snow = weather.snow != null ? weather.snow.snowPrep : 0.0;
+                    rainPrep.add(rain);
+                    snowPrep.add(snow);
                 }
 
                 setDtList(dayTime);
                 setTempsList(temps);
-//                setRainPrepList(rainPrep);
-//                setSnowPrepList(snowPrep);
+                setRainPrepList(rainPrep);
+                setSnowPrepList(snowPrep);
             }catch (Exception e){
                 e.printStackTrace();
             }
