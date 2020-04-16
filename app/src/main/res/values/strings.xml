@@ -25,4 +25,13 @@
     <string name="time">time</string>
     <string name="feel">feel</string>
     <string name="temp">temp</string>
+
+    <!--Settings-->
+    <string name="title_activity_settings">Settings</string>
+
+    <!--SharedPreferences keys-->
+    <string name="sp_key_chart_type_precipitation">chartTypePrecipitation</string>
+    <string name="sp_key_precipitation_chart_color">precipitationChartColor</string>
+    <string name="sp_key_temperature_chart_color">temperatureChartColor</string>
+
 </resources>
