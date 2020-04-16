@@ -1,5 +1,8 @@
 package com.pklos.myweather;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -20,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceManager;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
@@ -39,13 +44,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class ForecastFragment extends Fragment {
-    private ArrayList<Long> dts;
-    private ArrayList<Double> temps;
-    private ArrayList<Double> precisRain;
-    private ArrayList<Double> precisSnow;
+    private List<Long> dts;
+    private List<Double> temps;
+    private List<Double> precisRain;
+    private List<Double> precisSnow;
 
     private CombinedChart chart;
     private final int dataPeriod = 40;//every 3 hours, total amount 120 hours, 5 days
+
+    private Context context;
+    private SharedPreferences sharedPreferences;
+
+    private String precipitationChartColor;
+    private String temperatureChartColor;
+    private String lineDataSetType;
 
     @Nullable
     @Override
@@ -61,11 +73,19 @@ public class ForecastFragment extends Fragment {
         precisRain = MainActivity.getRainPrepsList();
         precisSnow = MainActivity.getSnowPrepsList();
 
-        ArrayList<String> dtsLabels = new ArrayList<>();
+        List<String> dtsLabels = new ArrayList<>();
         TimeStampConverter.setPattern("dd.MM HH:ss");
         for (Long dt : dts){
             dtsLabels.add(TimeStampConverter.ConvertTimeStampToDate(dt));
         }
+
+        //SETTINGS
+        context = getContext();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        precipitationChartColor = sharedPreferences.getString(getString(R.string.sp_key_precipitation_chart_color), "#000000");
+        temperatureChartColor = sharedPreferences.getString(getString(R.string.sp_key_temperature_chart_color), "#3F48CC");
+        lineDataSetType = sharedPreferences.getString(getString(R.string.sp_key_chart_type_precipitation), "HORIZONTAL_BEZIER");
 
         //CHART
         chart = (CombinedChart)view.findViewById(R.id.forecastChart);
@@ -171,12 +191,12 @@ public class ForecastFragment extends Fragment {
 
         for (int i = 0; i < dataPeriod; i++){
             float precipitation = precisRain.get(i).floatValue() + precisSnow.get(i).floatValue();
-            entries.add(new BarEntry(0, precipitation));
+            entries.add(new BarEntry(i + 0.5f, precipitation));
         }
 
         BarDataSet set = new BarDataSet(entries, "Precipitation");
-        set.setColor(Color.BLACK);
-        set.setValueTextColor(Color.BLACK);
+        set.setColor(Color.parseColor(precipitationChartColor));
+        set.setValueTextColor(Color.parseColor(precipitationChartColor));
         set.setValueTextSize(8.0f);
         set.setAxisDependency(YAxis.AxisDependency.RIGHT);
 
@@ -197,15 +217,30 @@ public class ForecastFragment extends Fragment {
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Temperatures");
-        dataSet.setColor(Color.BLUE);
+        dataSet.setColor(Color.parseColor(temperatureChartColor));
         dataSet.setLineWidth(3.0f);
-        dataSet.setCircleColor(Color.BLUE);
+        dataSet.setCircleColor(Color.parseColor(temperatureChartColor));
         dataSet.setCircleRadius(5.0f);
-        dataSet.setFillColor(Color.BLUE);
-        dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        dataSet.setFillColor(Color.parseColor(temperatureChartColor));
+
+        switch (lineDataSetType){ //it can be performed differently for sure
+            case "HORIZONTAL_BEZIER":
+                dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+                break;
+            case "CUBIC_BEZIER":
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                break;
+            case "LINEAR":
+                dataSet.setMode(LineDataSet.Mode.LINEAR);
+                break;
+            case "STEPPED":
+                dataSet.setMode(LineDataSet.Mode.STEPPED);
+                break;
+        }
+
         dataSet.setDrawValues(true);
         dataSet.setValueTextSize(8.0f);
-        dataSet.setValueTextColor(Color.BLUE);
+        dataSet.setValueTextColor(Color.parseColor(temperatureChartColor));
 
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
 
