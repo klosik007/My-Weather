@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="chart_colors_category"
+        app:title="Chart Colors">
+        <ListPreference
+            app:key="@string/sp_key_precipitation_chart_color"
+            app:title="Precipitation Chart Color"
+            app:defaultValue="#000000"
+            app:entries="@array/chart_color_names"
+            app:entryValues="@array/chart_color_values"
+            app:summary="Select precipitation chart color"
+            />
+        <ListPreference
+            app:key="@string/sp_key_temperature_chart_color"
+            app:title="Temperature Chart Color"
+            app:defaultValue="#3F48CC"
+            app:entries="@array/chart_color_names"
+            app:entryValues="@array/chart_color_values"
+            app:summary="Select temperature chart color"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="chart_type_bar_category"
+        app:title="Chart Type - Precipitation">
+        <ListPreference
+            app:key="@string/sp_key_chart_type_precipitation"
+            app:title="Precipitation Chart Type"
+            app:defaultValue="HORIZONTAL_BEZIER"
+            app:entries="@array/chart_type_precipitation_names"
+            app:entryValues="@array/chart_type_precipitation_values"/>
+
+    </PreferenceCategory>
+
+<!--    <PreferenceCategory-->
+<!--        app:key="app_style_category"-->
+<!--        app:title="App Style">-->
+
+<!--    </PreferenceCategory>-->
+
+</PreferenceScreen>
