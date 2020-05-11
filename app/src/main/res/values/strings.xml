@@ -25,6 +25,11 @@
     <string name="time">time</string>
     <string name="feel">feel</string>
     <string name="temp">temp</string>
+    <string name="add_location">Add Location</string>
+    <string name="drawerOpen">drawerOpen</string>
+    <string name="drawerClose">drawerClose</string>
+    <string name="cityNameHint">Type City Name</string>
+    <string name="button_searchCity">Search City</string>
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
