@@ -2,6 +2,7 @@ package com.pklos.myweather;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,26 +63,16 @@ public class FilesHandler {
         return file.exists();
     }
 
-    public static String readerToString(Reader reader){
-//        BufferedReader in = new BufferedReader(reader);
-//        String line = null;
-//        StringBuilder rslt = new StringBuilder();
-//        while ((line = in.readLine()) != null) {
-//            rslt.append(line);
-//        }
-        String text = new Scanner(reader).useDelimiter("\\Z").next();
-        return text;
-    }
-
-    public static String readerToString2(Reader reader) throws IOException{
-        char[] arr = new char[8*1024]; // 8K at a time
-        StringBuffer buf = new StringBuffer();
-        int numChars;
-
-        while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
-            buf.append(arr, 0, numChars);
+    public void createCitiesFileOnStart(){
+        boolean isFileAvailable = isFileAvailable("cities.json");
+        if (!isFileAvailable){
+           //first launch of app - create empty cities.json file
+            boolean isFileCreated = createFile("cities.json", "{\"cities\":[{\"id\":0,\"cityName\":\"\",\"cityID\":\"\",\"isDefault\":false}]}");
+            if (isFileCreated){
+                Toast.makeText(_context, "File cities.json created", Toast.LENGTH_LONG).show();
+            } else{
+                throw new RuntimeException();
+            }
         }
-
-        return buf.toString();
     }
 }
