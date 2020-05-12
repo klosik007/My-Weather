@@ -1,8 +1,4 @@
-package com.pklos.myweather;
-
-import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONObject;
+package com.pklos.myweather.weatherforecast_model;
 
 import java.util.List;
 

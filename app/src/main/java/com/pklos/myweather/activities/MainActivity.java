@@ -1,4 +1,4 @@
-package com.pklos.myweather;
+package com.pklos.myweather.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,16 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.Toast;
@@ -28,6 +24,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pklos.myweather.file_handlers.FilesHandler;
+import com.pklos.myweather.fragments.ForecastFragment;
+import com.pklos.myweather.weatherforecast_model.ForecastParams;
+import com.pklos.myweather.fragments.HomeFragment;
+import com.pklos.myweather.weatherforecast_model.MainParameters;
+import com.pklos.myweather.fragments.MoreInfoFragment;
+import com.pklos.myweather.R;
+import com.pklos.myweather.utils.RestAPIService;
+import com.pklos.myweather.weatherforecast_model.Weather;
+import com.pklos.myweather.weatherforecast_model._List;
 
 import java.util.ArrayList;
 import java.util.List;

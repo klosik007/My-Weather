@@ -1,4 +1,4 @@
-package com.pklos.myweather;
+package com.pklos.myweather.weatherforecast_model;
 
 public class Weather {
     public String main;

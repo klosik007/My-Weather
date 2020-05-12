@@ -1,4 +1,4 @@
-package com.pklos.myweather;
+package com.pklos.myweather.file_handlers;
 
 import android.content.Context;
 

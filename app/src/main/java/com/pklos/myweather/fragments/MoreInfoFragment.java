@@ -1,4 +1,4 @@
-package com.pklos.myweather;
+package com.pklos.myweather.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.pklos.myweather.R;
+import com.pklos.myweather.activities.MainActivity;
+import com.pklos.myweather.utils.TimeStampConverter;
 
 public class MoreInfoFragment extends Fragment {
     TextView cityText;

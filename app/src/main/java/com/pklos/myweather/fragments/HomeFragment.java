@@ -1,8 +1,6 @@
-package com.pklos.myweather;
+package com.pklos.myweather.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import java.util.Map;
+import com.pklos.myweather.R;
+import com.pklos.myweather.activities.MainActivity;
+import com.pklos.myweather.utils.TimeStampConverter;
 
 public class HomeFragment extends Fragment {
     TextView city;

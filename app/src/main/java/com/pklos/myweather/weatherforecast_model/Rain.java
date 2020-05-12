@@ -1,4 +1,4 @@
-package com.pklos.myweather;
+package com.pklos.myweather.weatherforecast_model;
 
 import com.google.gson.annotations.SerializedName;
 

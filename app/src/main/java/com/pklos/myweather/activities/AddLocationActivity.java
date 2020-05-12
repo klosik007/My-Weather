@@ -1,9 +1,11 @@
-package com.pklos.myweather;
+package com.pklos.myweather.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.pklos.myweather.R;
 
 public class AddLocationActivity extends AppCompatActivity {
 

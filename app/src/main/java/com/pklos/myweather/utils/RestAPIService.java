@@ -1,10 +1,10 @@
-package com.pklos.myweather;
+package com.pklos.myweather.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-class RestAPIService {
+public class RestAPIService {
     public static String getStream(String urlString) throws Exception {
         BufferedReader reader = null;
         try {

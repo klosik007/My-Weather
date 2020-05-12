@@ -1,20 +1,13 @@
-package com.pklos.myweather;
+package com.pklos.myweather.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -23,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceManager;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -38,6 +30,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.pklos.myweather.R;
+import com.pklos.myweather.activities.MainActivity;
+import com.pklos.myweather.utils.TimeStampConverter;
 
 import java.util.ArrayList;
 import java.util.Collections;
