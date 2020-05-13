@@ -26,6 +26,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pklos.myweather.file_handlers.FilesHandler;
 import com.pklos.myweather.fragments.ForecastFragment;
+import com.pklos.myweather.locations_database.LocationsDB;
+import com.pklos.myweather.locations_database.MyWeatherExecutors;
+import com.pklos.myweather.locations_model.Location;
 import com.pklos.myweather.weatherforecast_model.ForecastParams;
 import com.pklos.myweather.fragments.HomeFragment;
 import com.pklos.myweather.weatherforecast_model.MainParameters;
@@ -231,6 +234,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
+    private void insertInitialData(){
+        final LocationsDB appDB = LocationsDB.getInstance(this);
+        final Location location = new Location("Gdańsk", "7000000", true);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                appDB.locationsDao().insertLocation(location);
+            }
+        });
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,8 +253,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        FilesHandler fileHandler = new FilesHandler(MainActivity.this);
-        fileHandler.createCitiesFileOnStart();
+//        FilesHandler fileHandler = new FilesHandler(MainActivity.this);
+//        fileHandler.createCitiesFileOnStart();
+        insertInitialData();
 
         //default cityID
         cityID = "3099434";//Gdańsk
