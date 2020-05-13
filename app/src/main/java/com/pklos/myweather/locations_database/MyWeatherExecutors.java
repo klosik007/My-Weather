@@ -1,13 +1,12 @@
 package com.pklos.myweather.locations_database;
 
+import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class MyWeatherExecutors {
     private static final Object LOCK = new Object();
@@ -46,26 +45,11 @@ public class MyWeatherExecutors {
     }
 
     private static class MainThreadExecutor implements Executor{
-//        private Handler mainThreadHandler = new Handler() {
-//            @Override
-//            public void publish(LogRecord record) {
-//
-//            }
-//
-//            @Override
-//            public void flush() {
-//
-//            }
-//
-//            @Override
-//            public void close() throws SecurityException {
-//
-//            }
-//        };
+        private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         @Override
         public void execute(@NonNull Runnable command) {
-           // mainThreadHandler.post(command);
+            mainThreadHandler.post(command);
         }
     }
 }
