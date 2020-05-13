@@ -245,6 +245,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void fetchLocationsData(){
+        final LocationsDB appDB = LocationsDB.getInstance(this);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                final List<Location> locations = appDB.locationsDao().getLocationsList();
+                for (Location location : locations){
+                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
+                }
+            }
+        });
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        FilesHandler fileHandler = new FilesHandler(MainActivity.this);
 //        fileHandler.createCitiesFileOnStart();
         insertInitialData();
+        fetchLocationsData();
 
         //default cityID
         cityID = "3099434";//Gdańsk
