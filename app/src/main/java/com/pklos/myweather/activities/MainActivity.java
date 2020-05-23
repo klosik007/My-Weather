@@ -234,29 +234,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
-    private void insertInitialData(){
-        final LocationsDB appDB = LocationsDB.getInstance(this);
-        final Location location = new Location("Gdańsk", "7000000", true);
-        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
-            @Override
-            public void run() {
-                appDB.locationsDao().insertLocation(location);
-            }
-        });
-    }
-
-    private void fetchLocationsData(){
-        final LocationsDB appDB = LocationsDB.getInstance(this);
-        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
-            @Override
-            public void run() {
-                final List<Location> locations = appDB.locationsDao().getLocationsList();
-                for (Location location : locations){
-                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
-                }
-            }
-        });
-    }
+//    private void insertInitialData(){
+//        final LocationsDB appDB = LocationsDB.getInstance(this);
+//        final Location location = new Location("Gdańsk", "7000000", true);
+//        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+//            @Override
+//            public void run() {
+//                appDB.locationsDao().insertLocation(location);
+//            }
+//        });
+//    }
+//
+//    private void fetchLocationsData(){
+//        final LocationsDB appDB = LocationsDB.getInstance(this);
+//        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+//            @Override
+//            public void run() {
+//                final List<Location> locations = appDB.locationsDao().getLocationsList();
+//                for (Location location : locations){
+//                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
+//                }
+//            }
+//        });
+//    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -268,8 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        FilesHandler fileHandler = new FilesHandler(MainActivity.this);
 //        fileHandler.createCitiesFileOnStart();
-        insertInitialData();
-        fetchLocationsData();
+//        insertInitialData();
+//        fetchLocationsData();
 
         //default cityID
         cityID = "3099434";//Gdańsk
