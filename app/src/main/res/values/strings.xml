@@ -31,7 +31,7 @@
     <string name="cityNameHint">Type City Name</string>
     <string name="button_searchCity">Search City</string>
     <string name="results_count">Results count: %1$d</string>
-    <string name="lon_lat">Longtitude: %1$d  Latitude: %2$d</string>
+    <string name="lon_lat">Longtitude: %1$f  Latitude: %2$f</string>
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
