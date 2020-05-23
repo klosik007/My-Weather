@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -84,23 +86,23 @@ public class AddLocationActivity extends AppCompatActivity {
     private LinearLayout createCityRecordFromJSON(int id, String cityName, double lat, double lon){
         TextView cityIDTextView = new TextView(this);
         cityIDTextView.setTextSize(20);
-        cityIDTextView.setGravity(Gravity.START);
-        cityIDTextView.setText(id);
+        cityIDTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        cityIDTextView.setText(String.valueOf(id));
 
         TextView cityNameTextView = new TextView(this);
         cityNameTextView.setTextSize(20);
-        cityNameTextView.setGravity(Gravity.START);
-        cityNameTextView.setText(id);
+        cityNameTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        cityNameTextView.setText(cityName);
 
         TextView latLonTextView = new TextView(this);
         latLonTextView.setTextSize(20);
-        latLonTextView.setGravity(Gravity.START);
+        latLonTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         latLonTextView.setText(getString(R.string.lon_lat, lon, lat));
 
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        ll.setGravity(Gravity.LEFT);
+        ll.setGravity(Gravity.START);
         ll.addView(cityIDTextView);
         ll.addView(cityNameTextView);
         ll.addView(latLonTextView);
@@ -112,9 +114,9 @@ public class AddLocationActivity extends AppCompatActivity {
     public void searchCityButton(View view){
         TextView cityName = (TextView) findViewById(R.id.cityName);
         String param = cityName.getText().toString();
-        StringBuilder JSONUrl = new StringBuilder("http://openweathermap.org/data/2.5/find?callback=?&q=")
+        StringBuilder JSONUrl = new StringBuilder("http://api.openweathermap.org/data/2.5/find?callback=&q=")
                                     .append(param)
-                                    .append("&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02");
+                                    .append("&type=like&sort=population&cnt=30&appid=50768df1f9a4be14d70a612605801e5c");
         new getSearchJSONData().execute(JSONUrl.toString());
     }
 
@@ -141,6 +143,7 @@ public class AddLocationActivity extends AppCompatActivity {
             return response;
         }
 
+        @SuppressLint("ResourceType")
         @Override
         protected void onPostExecute(SearchCityParams response){
             try{
@@ -159,37 +162,52 @@ public class AddLocationActivity extends AppCompatActivity {
                     lon.add(results.coord.lon);
                 }
 
-                set_count(count);
-                set_ids(ids);
-                set_cityNames(cityNames);
-                set_lat(lat);
-                set_lon(lon);
+//                set_count(count);
+//                set_ids(ids);
+//                set_cityNames(cityNames);
+//                set_lat(lat);
+//                set_lon(lon);
 
                 ConstraintLayout mainLayout = (ConstraintLayout) findViewById((R.id.addLocationLayout));
                 ConstraintSet constraintSet = new ConstraintSet();
                 List<Integer> layoutsIds = new ArrayList<>();
                 constraintSet.clone(mainLayout);
 
-                LinearLayout countInfo = printResultsCountFromJSON(_count);
+                LinearLayout countInfo = printResultsCountFromJSON(count);
+                countInfo.setId(100);
                 mainLayout.addView(countInfo);
                 int countInfoID = countInfo.getId();
-                constraintSet.connect(countInfoID, ConstraintSet.TOP, R.id.searchButton, ConstraintSet.BOTTOM, 0 );
+                constraintSet.connect(countInfoID, ConstraintSet.TOP, R.id.searchButton , ConstraintSet.BOTTOM, 0 );
+                constraintSet.connect(countInfoID, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0 );
+                constraintSet.connect(countInfoID, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0 );
+                constraintSet.constrainHeight(countInfoID, 200);
+                constraintSet.applyTo(mainLayout);
 
-                LinearLayout cityResult = createCityRecordFromJSON(_ids.get(0), _cityNames.get(0), _lat.get(0), _lon.get(0));
+                LinearLayout cityResult = createCityRecordFromJSON(ids.get(0), cityNames.get(0), lat.get(0), lon.get(0));
+                //cityResult.setId(101);
                 mainLayout.addView(cityResult);
                 int cityResultID = cityResult.getId();
                 constraintSet.connect(cityResultID, ConstraintSet.TOP, countInfoID, ConstraintSet.BOTTOM, 0 );
+                constraintSet.connect(cityResultID, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0 );
+                constraintSet.connect(cityResultID, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0 );
+                constraintSet.constrainHeight(cityResultID, 250);
+                constraintSet.applyTo(mainLayout);
+
                 layoutsIds.add(cityResultID);
 
-                for (int index = 1; index < _count; index++){
-                    LinearLayout cityResultNext = createCityRecordFromJSON(_ids.get(index), _cityNames.get(index), _lat.get(index), _lon.get(index));
+                for (int index = 1; index < count; index++){
+                    LinearLayout cityResultNext = createCityRecordFromJSON(ids.get(index), cityNames.get(index), lat.get(index), lon.get(index));
                     mainLayout.addView(cityResultNext);
                     int cityResultNextID = cityResultNext.getId();
                     layoutsIds.add(cityResultNextID);
                     constraintSet.connect(layoutsIds.get(index), ConstraintSet.TOP, layoutsIds.get(index - 1), ConstraintSet.BOTTOM, 0 );
+                    constraintSet.connect(layoutsIds.get(index), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0 );
+                    constraintSet.connect(layoutsIds.get(index), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0 );
+                    constraintSet.constrainHeight(layoutsIds.get(index), 250);
+                    constraintSet.applyTo(mainLayout);
                 }
 
-                constraintSet.applyTo(mainLayout);
+                //constraintSet.applyTo(mainLayout);
             }catch(Exception e){
                 e.printStackTrace();
             }
