@@ -28,6 +28,7 @@ import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
 import com.pklos.myweather.searchcity_model.SearchCityParams;
 import com.pklos.myweather.searchcity_model._List2;
+import com.pklos.myweather.utils.LocalDBUtils;
 import com.pklos.myweather.utils.RestAPIService;
 
 import java.util.ArrayList;
@@ -77,17 +78,6 @@ public class AddLocationActivity extends AppCompatActivity {
     }
 //----------------------------------------------
 
-    private void insertDataToDB(int id, String cityName){
-        final LocationsDB appDB = LocationsDB.getInstance(this);
-        final Location location = new Location(cityName, String.valueOf(id), false);
-        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
-            @Override
-            public void run() {
-                appDB.locationsDao().insertLocation(location);
-            }
-        });
-    }
-
     private LinearLayout printResultsCountFromJSON(int count){
         TextView countTextView = new TextView(this);
         countTextView.setTextSize(20);
@@ -118,8 +108,9 @@ public class AddLocationActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                insertDataToDB(id, cityName);
+                LocalDBUtils.insertDataToDB(getApplicationContext(), id, cityName);
                 Toast.makeText(getApplicationContext(), R.string.added_city_alert, Toast.LENGTH_LONG).show();
+                //LocalDBUtils.fetchLocationsData(getApplicationContext());
             }
         });
 
