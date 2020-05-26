@@ -1,22 +1,31 @@
 package com.pklos.myweather.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.pklos.myweather.R;
+import com.pklos.myweather.locations_database.LocationsDB;
+import com.pklos.myweather.locations_database.MyWeatherExecutors;
+import com.pklos.myweather.locations_model.Location;
 import com.pklos.myweather.searchcity_model.SearchCityParams;
 import com.pklos.myweather.searchcity_model._List2;
 import com.pklos.myweather.utils.RestAPIService;
@@ -68,6 +77,17 @@ public class AddLocationActivity extends AppCompatActivity {
     }
 //----------------------------------------------
 
+    private void insertDataToDB(int id, String cityName){
+        final LocationsDB appDB = LocationsDB.getInstance(this);
+        final Location location = new Location(cityName, String.valueOf(id), false);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                appDB.locationsDao().insertLocation(location);
+            }
+        });
+    }
+
     private LinearLayout printResultsCountFromJSON(int count){
         TextView countTextView = new TextView(this);
         countTextView.setTextSize(20);
@@ -83,11 +103,25 @@ public class AddLocationActivity extends AppCompatActivity {
         return llCount;
     }
 
-    private LinearLayout createCityRecordFromJSON(int id, String cityName, double lat, double lon){
-        TextView cityIDTextView = new TextView(this);
-        cityIDTextView.setTextSize(20);
-        cityIDTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        cityIDTextView.setText(String.valueOf(id));
+    private LinearLayout createCityRecordFromJSON(final int id, final String cityName, double lat, double lon){
+//        TextView cityIDTextView = new TextView(this);
+//        cityIDTextView.setTextSize(20);
+//        cityIDTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+//        cityIDTextView.setText(String.valueOf(id));
+        ImageButton addButton = new ImageButton(this);
+        addButton.setImageResource(R.drawable.ic_plus_one_black_24dp);
+        //addButton.setImageDrawable(getBaseContext().getResources().getDrawable(R.drawable.add_button_states));
+        addButton.setMaxWidth(50);
+        addButton.setMaxHeight(50);
+        //addButton.setSelected(!addButton.isSelected());
+        addButton.setOnClickListener(new ImageButton.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                insertDataToDB(id, cityName);
+                Toast.makeText(getApplicationContext(), R.string.added_city_alert, Toast.LENGTH_LONG).show();
+            }
+        });
 
         TextView cityNameTextView = new TextView(this);
         cityNameTextView.setTextSize(20);
@@ -97,15 +131,15 @@ public class AddLocationActivity extends AppCompatActivity {
         TextView latLonTextView = new TextView(this);
         latLonTextView.setTextSize(20);
         latLonTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        latLonTextView.setText(getString(R.string.lon_lat, lon, lat));
+        latLonTextView.setText(getString(R.string.lon_lat, lat, lon));
 
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         ll.setGravity(Gravity.START);
-        ll.addView(cityIDTextView);
         ll.addView(cityNameTextView);
         ll.addView(latLonTextView);
+        ll.addView(addButton);
         ll.setId(id);
 
         return ll;
@@ -114,10 +148,23 @@ public class AddLocationActivity extends AppCompatActivity {
     public void searchCityButton(View view){
         TextView cityName = (TextView) findViewById(R.id.cityName);
         String param = cityName.getText().toString();
-        StringBuilder JSONUrl = new StringBuilder("http://api.openweathermap.org/data/2.5/find?callback=&q=")
-                                    .append(param)
-                                    .append("&type=like&sort=population&cnt=30&appid=50768df1f9a4be14d70a612605801e5c");
-        new getSearchJSONData().execute(JSONUrl.toString());
+        if (!param.isEmpty()){
+            StringBuilder JSONUrl = new StringBuilder("http://api.openweathermap.org/data/2.5/find?callback=&q=")
+                    .append(param)
+                    .append("&type=like&sort=population&cnt=30&appid=50768df1f9a4be14d70a612605801e5c");
+//            ConstraintLayout mainLayout = (ConstraintLayout) findViewById((R.id.addLocationLayout));
+//            int childViewsCounter = mainLayout.getChildCount();
+//            if (childViewsCounter > 2){
+//                for(int i = 3; i < childViewsCounter; i++){
+//                    View viewToRemove = mainLayout.getChildAt(i);
+//                    mainLayout.removeView(viewToRemove);
+//                }
+//            }
+
+            new getSearchJSONData().execute(JSONUrl.toString());
+        }
+        else Toast.makeText(this, R.string.type_city_alert, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -184,13 +231,12 @@ public class AddLocationActivity extends AppCompatActivity {
                 constraintSet.applyTo(mainLayout);
 
                 LinearLayout cityResult = createCityRecordFromJSON(ids.get(0), cityNames.get(0), lat.get(0), lon.get(0));
-                //cityResult.setId(101);
                 mainLayout.addView(cityResult);
                 int cityResultID = cityResult.getId();
                 constraintSet.connect(cityResultID, ConstraintSet.TOP, countInfoID, ConstraintSet.BOTTOM, 0 );
                 constraintSet.connect(cityResultID, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0 );
                 constraintSet.connect(cityResultID, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0 );
-                constraintSet.constrainHeight(cityResultID, 250);
+                constraintSet.constrainHeight(cityResultID, 350);
                 constraintSet.applyTo(mainLayout);
 
                 layoutsIds.add(cityResultID);
@@ -203,11 +249,9 @@ public class AddLocationActivity extends AppCompatActivity {
                     constraintSet.connect(layoutsIds.get(index), ConstraintSet.TOP, layoutsIds.get(index - 1), ConstraintSet.BOTTOM, 0 );
                     constraintSet.connect(layoutsIds.get(index), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0 );
                     constraintSet.connect(layoutsIds.get(index), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0 );
-                    constraintSet.constrainHeight(layoutsIds.get(index), 250);
+                    constraintSet.constrainHeight(layoutsIds.get(index), 350);
                     constraintSet.applyTo(mainLayout);
                 }
-
-                //constraintSet.applyTo(mainLayout);
             }catch(Exception e){
                 e.printStackTrace();
             }
