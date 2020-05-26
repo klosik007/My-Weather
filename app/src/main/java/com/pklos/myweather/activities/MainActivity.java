@@ -29,6 +29,7 @@ import com.pklos.myweather.fragments.ForecastFragment;
 import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
+import com.pklos.myweather.utils.LocalDBUtils;
 import com.pklos.myweather.weatherforecast_model.ForecastParams;
 import com.pklos.myweather.fragments.HomeFragment;
 import com.pklos.myweather.weatherforecast_model.MainParameters;
@@ -266,11 +267,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-//        FilesHandler fileHandler = new FilesHandler(MainActivity.this);
-//        fileHandler.createCitiesFileOnStart();
-//        insertInitialData();
-//        fetchLocationsData();
-
         //default cityID
         cityID = "3099434";//Gdańsk
         fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
@@ -298,11 +294,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
-        SubMenu subMenu = menu.addSubMenu(0, 0, 0, "Locations");
-        subMenu.add(0, 0, 0, "Gdańsk").setOnMenuItemClickListener(menuItemClickListener);
-        subMenu.add(0, 1, 0, "Damnica").setOnMenuItemClickListener(menuItemClickListener);
+        final SubMenu subMenu = menu.addSubMenu(0, 0, 0, "Locations");
+        final LocationsDB appDB = LocationsDB.getInstance(this);
 
-
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                final List<Location> locations = appDB.locationsDao().getLocationsList();
+                for (final Location location : locations){
+                    subMenu.add(0, location.getId(), 0, location.getCityName()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            cityID = location.getCityID();
+                            fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
+                                    .append(cityID)
+                                    .append("&appid=50768df1f9a4be14d70a612605801e5c");
+                            currentForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/weather?id=")
+                                    .append(cityID)
+                                    .append("&appid=50768df1f9a4be14d70a612605801e5c");
+                            new getJSONData().execute(currentForecast.toString());
+                            new getForecastData().execute(fiveDaysForecast.toString());
+                            return true;
+                        }
+                    });
+                }
+            }
+        });
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -310,25 +327,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
         //transactFragment(new HomeFragment(), true);
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-////        MenuInflater inflater = getMenuInflater();
-////        inflater.inflate(R.menu.settings_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.settings:
-//                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-//                startActivity(settingsIntent);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -349,31 +347,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.view_pager, selectedFragment).commit();
-
-                    return true;
-                }
-            };
-
-    private MenuItem.OnMenuItemClickListener menuItemClickListener =
-            new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch(item.getItemId()){
-                        case 0:
-                            Toast.makeText(MainActivity.this, "Gdańsk", Toast.LENGTH_SHORT).show();
-                            return true;
-                        case 1:
-                            cityID = "3100671";//Damnica
-                            fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
-                                    .append(cityID)
-                                    .append("&appid=50768df1f9a4be14d70a612605801e5c");
-                            currentForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/weather?id=")
-                                    .append(cityID)
-                                    .append("&appid=50768df1f9a4be14d70a612605801e5c");
-                            new getJSONData().execute(currentForecast.toString());
-                            new getForecastData().execute(fiveDaysForecast.toString());
-                            return true;
-                    }
 
                     return true;
                 }
