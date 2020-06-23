@@ -3,10 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/stable_group">
         <item android:id="@+id/settings"
-            android:title="@string/settings" />
+            android:title="@string/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            />
 
         <item android:id="@+id/add_location"
-            android:title="@string/add_location" />
+            android:title="@string/add_location"
+            android:icon="@drawable/ic_plus_one_black_24dp"/>
     </group>
 
 </menu>
