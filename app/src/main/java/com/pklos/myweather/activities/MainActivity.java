@@ -14,9 +14,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 
@@ -24,12 +28,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pklos.myweather.file_handlers.FilesHandler;
 import com.pklos.myweather.fragments.ForecastFragment;
 import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
-import com.pklos.myweather.utils.LocalDBUtils;
 import com.pklos.myweather.weatherforecast_model.ForecastParams;
 import com.pklos.myweather.fragments.HomeFragment;
 import com.pklos.myweather.weatherforecast_model.MainParameters;
@@ -297,12 +299,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SubMenu subMenu = menu.addSubMenu(0, 0, 0, "Locations");
         final LocationsDB appDB = LocationsDB.getInstance(this);
 
+
         MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
             @Override
             public void run() {
                 final List<Location> locations = appDB.locationsDao().getLocationsList();
                 for (final Location location : locations){
-                    subMenu.add(0, location.getId(), 0, location.getCityName()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+                    subMenu.add(0, location.getId(), 0, location.getCityName())
+                           .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             cityID = location.getCityID();
