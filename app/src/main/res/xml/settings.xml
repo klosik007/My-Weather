@@ -30,14 +30,12 @@
             app:title="Precipitation Chart Type"
             app:defaultValue="HORIZONTAL_BEZIER"
             app:entries="@array/chart_type_precipitation_names"
-            app:entryValues="@array/chart_type_precipitation_values"/>
+            app:entryValues="@array/chart_type_precipitation_values" />
 
     </PreferenceCategory>
 
-<!--    <PreferenceCategory-->
-<!--        app:key="app_style_category"-->
-<!--        app:title="App Style">-->
-
-<!--    </PreferenceCategory>-->
-
+    <PreferenceCategory
+        app:key="cities_to_delete"
+        app:title="Cities">
+    </PreferenceCategory>
 </PreferenceScreen>
