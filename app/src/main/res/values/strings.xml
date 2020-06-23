@@ -34,6 +34,8 @@
     <string name="lon_lat">Latitude: %1$f  Longtitude: %2$f</string>
     <string name="type_city_alert">Type Name of City!</string>
     <string name="added_city_alert">City Added!</string>
+    <string name="touch_city_tip">Touch to Remove</string>
+    <string name="on_city_remove">City Removed From List</string>
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
