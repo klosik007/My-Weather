@@ -7,10 +7,7 @@ import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class LocalDBUtils {
     public static void insertDataToDB(Context context, int id, String cityName){
@@ -20,6 +17,16 @@ public class LocalDBUtils {
             @Override
             public void run() {
                 appDB.locationsDao().insertLocation(location);
+            }
+        });
+    }
+
+    public static void deleteDataFromDB(Context context, final Location location){
+        final LocationsDB appDB = LocationsDB.getInstance(context);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                appDB.locationsDao().deleteLocation(location);
             }
         });
     }
