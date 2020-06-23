@@ -1,21 +1,14 @@
 package com.pklos.myweather.activities;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,9 +16,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.pklos.myweather.R;
-import com.pklos.myweather.locations_database.LocationsDB;
-import com.pklos.myweather.locations_database.MyWeatherExecutors;
-import com.pklos.myweather.locations_model.Location;
 import com.pklos.myweather.searchcity_model.SearchCityParams;
 import com.pklos.myweather.searchcity_model._List2;
 import com.pklos.myweather.utils.LocalDBUtils;
