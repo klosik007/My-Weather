@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="city">Miasto</string>
+    <string name="weather_forecast">Prognoza</string>
+    <string name="nav_home">Główny</string>
+    <string name="settings">Ustawienia</string>
+    <string name="sunrise">Wschód</string>
+    <string name="sunset">Zachód</string>
+    <string name="pressure">Ciśnienie</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="more_info">Więcej</string>
+    <string name="wind_speed">Prędkość wiatru</string>
+    <string name="wind_deg">Kierunek wiatru</string>
+    <string name="Visibility">Widoczność</string>
+    <string name="maxTempView">Maks.temperatura</string>
+    <string name="maxTemp">Min. temperatura</string>
+    <string name="minTempView">Min. temperatura</string>
+    <string name="minTemp">Min. temperatura</string>
+    <string name="current_temp">Temperatura</string>
+    <string name="feel_temp">Odczuwalna</string>
+    <string name="time_stamp">Aktualizacja</string>
+    <string name="main_description">Główny opis</string>
+    <string name="adv_description">Dodatkowy opis</string>
+    <string name="image_content_description">weather_img</string>
+    <string name="time">czas</string>
+    <string name="feel">odczuw</string>
+    <string name="temp">temp</string>
+    <string name="add_location">Dodaj lokację</string>
+    <string name="drawerOpen">drawerOpen</string>
+    <string name="drawerClose">drawerClose</string>
+    <string name="cityNameHint">Wpisz nazwę lokacji</string>
+    <string name="button_searchCity">Wyszukaj lokacji</string>
+    <string name="results_count">Ilość wyników: %1$d</string>
+    <string name="lon_lat">Szerokość geo: %1$f Długość geo: %2$f</string>
+    <string name="type_city_alert">Wpisz nazwę lokacji!</string>
+    <string name="added_city_alert">Lokacja dodana!</string>
+    <string name="touch_city_tip">Dotknij aby usunąć</string>
+    <string name="on_city_remove">Lokacja usunięta z listy</string>
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="sp_key_chart_type_precipitation">chartTypePrecipitation</string>
+    <string name="sp_key_precipitation_chart_color">precipitationChartColor</string>
+    <string name="sp_key_temperature_chart_color">temperatureChartColor</string>
+</resources>
