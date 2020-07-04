@@ -1,6 +1,6 @@
 package com.pklos.myweather.searchcity_model;
 
-import com.pklos.myweather.weatherforecast_model.Coord;
+import com.pklos.myweather.weatherforecast_openweather_model.Coord;
 
 public class _List2 {
     public int id;
