@@ -14,14 +14,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,14 +27,14 @@ import com.pklos.myweather.fragments.ForecastFragment;
 import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
-import com.pklos.myweather.weatherforecast_model.ForecastParams;
+import com.pklos.myweather.weatherforecast_openweather_model.ForecastParams;
 import com.pklos.myweather.fragments.HomeFragment;
-import com.pklos.myweather.weatherforecast_model.MainParameters;
+import com.pklos.myweather.weatherforecast_openweather_model.MainParameters;
 import com.pklos.myweather.fragments.MoreInfoFragment;
 import com.pklos.myweather.R;
 import com.pklos.myweather.utils.RestAPIService;
-import com.pklos.myweather.weatherforecast_model.Weather;
-import com.pklos.myweather.weatherforecast_model._List;
+import com.pklos.myweather.weatherforecast_openweather_model.Weather;
+import com.pklos.myweather.weatherforecast_openweather_model._List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -468,4 +463,3 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 }
-
