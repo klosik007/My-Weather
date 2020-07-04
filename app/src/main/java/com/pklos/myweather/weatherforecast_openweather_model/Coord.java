@@ -1,4 +1,4 @@
-package com.pklos.myweather.weatherforecast_model;
+package com.pklos.myweather.weatherforecast_openweather_model;
 
 public class Coord {
     public double lon;

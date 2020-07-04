@@ -1,6 +1,4 @@
-package com.pklos.myweather.weatherforecast_model;
-
-import com.google.gson.annotations.SerializedName;
+package com.pklos.myweather.weatherforecast_openweather_model;
 
 public class Main {
     public double temp;
