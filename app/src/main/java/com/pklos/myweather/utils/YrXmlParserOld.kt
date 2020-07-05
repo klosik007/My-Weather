@@ -6,7 +6,48 @@ import com.gitlab.mvysny.konsumexml.konsumeXml
 import java.io.File
 
 
-class YrXmlParser {
+class YrXmlParserOld {
+    data class WeatherForecast(val forecast : Forecast, val location : Location, val sun : Sun){
+        companion object {
+            fun parseWeatherForecast(weatherdata : Konsumer, location : Konsumer, sun : Konsumer) : WeatherForecast {
+                weatherdata.checkCurrent("forecast")
+                location.checkCurrent("location")
+                sun.checkCurrent("sun")
+
+                return WeatherForecast(weatherdata.child("forecast") { Forecast.parseForecast(this) },
+                                       location.child("location") { Location.parseLocation(this, this, this, this) },
+                                       sun.child("sun") { Sun.parseSun(this) })
+            }
+        }
+    }
+
+    data class Location(val name : String, val country : String, val utcOffsetMinutes : String, val location : String){
+        companion object{
+            fun parseLocation(name : Konsumer, country : Konsumer, utcOffsetMinutes : Konsumer, location : Konsumer) : Location{
+                name.checkCurrent("name");
+                country.checkCurrent("country")
+                utcOffsetMinutes.checkCurrent("timeZoneName")
+                location.checkCurrent("location")
+
+                return Location(name.childText("name"),
+                                country.childText("country"),
+                                utcOffsetMinutes.attributes.getValue("utcoffsetminutes"),
+                                location.attributes.getValue("geobaseid"))
+            }
+        }
+    }
+
+    data class Sun(val rise : String, val set : String){
+        companion object{
+            fun parseSun(k : Konsumer) : Sun{
+                k.checkCurrent("sun")
+
+                return Sun(k.attributes.getValue("rise"),
+                            k.attributes.getValue("set"))
+            }
+        }
+    }
+
     data class Forecast(val tabular : Tabular){
         companion object {
             fun parseForecast(forecast : Konsumer) : Forecast{
