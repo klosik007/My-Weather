@@ -2,9 +2,36 @@ package com.pklos.myweather.utils
 
 import com.gitlab.mvysny.konsumexml.Konsumer
 import com.gitlab.mvysny.konsumexml.childInt
+import com.gitlab.mvysny.konsumexml.konsumeXml
+import java.io.File
 
 
 class YrXmlParser {
+    data class Forecast(val tabular : Tabular){
+        companion object {
+            fun parseForecast(forecast : Konsumer) : Forecast{
+                forecast.checkCurrent("forecast")
+                return Forecast(forecast.child("tabular") { Tabular.parseTabular(this) })
+            }
+        }
+    }
+
+    data class Tabular(val time : Time){
+        companion object {
+            fun parseTabular(tabular : Konsumer) : Tabular{
+                tabular.checkCurrent("tabular")
+                return Tabular(tabular.child("time") { Time.parseTime(
+                        this,
+                        this,
+                        this,
+                        this,
+                        this,
+                        this,
+                        this
+                ) })
+            }
+        }
+    }
 
     data class Time(val timeFrom: String?,
                     val timeTo : String?,
@@ -41,8 +68,7 @@ class YrXmlParser {
         }
     }
 
-
-    fun parseXmlForecast(xml : String){
-
+    fun parseXmlForecast(xml : String) : Forecast{
+        return File(xml).konsumeXml().use { k -> k.child("forecast") { Forecast.parseForecast(this) } }
     }
 }
