@@ -35,11 +35,14 @@ import com.pklos.myweather.R;
 import com.pklos.myweather.utils.RestAPIService;
 import com.pklos.myweather.weatherforecast_openweather_model.Weather;
 import com.pklos.myweather.weatherforecast_openweather_model._List;
+import com.pklos.myweather.weatherforecast_yrno_model.ForecastYr;
+import com.pklos.myweather.weatherforecast_yrno_model.Timeseries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    //OpenWeather
     private static double _feelsLike = 0;
     private static String _city = "";
     private static double _temp = 0;
@@ -64,10 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private StringBuilder fiveDaysForecast;
     private StringBuilder currentForecast;
 
-    DrawerLayout drawerLayout;
-    Toolbar toolbar;
-    NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
+    private String forecastYrno;
 
     public static String getCityName() {
         return _city;
@@ -221,6 +221,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _snowPreps = snowPreps;
     }
 
+
+    //yr.no
+    private static ArrayList<String> _timeStrings = new ArrayList<>();
+    public static ArrayList<String> get_timeStrings() {
+        return _timeStrings;
+    }
+    public static void set_timeStrings(ArrayList<String> _timeStrings) {
+        MainActivity._timeStrings = _timeStrings;
+    }
+
+    //navigation
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
+    NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
+
     public void transactFragment(Fragment fragment, boolean reload) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -264,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        //OpenWeather
         //default cityID
         cityID = "3099434";//Gdańsk
         fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
@@ -273,8 +290,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .append(cityID)
                 .append("&appid=50768df1f9a4be14d70a612605801e5c");
 
+        //Yr.no default city - Gdańsk
+        forecastYrno = "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=54.3&lon=18.5";
+
+        //if in preferences OpenWeather
+        //OpenWeather
         new getJSONData().execute(currentForecast.toString());
         new getForecastData().execute(fiveDaysForecast.toString());
+
+        //if in preferences Yr.no
+        //new getJSONData().execute(currentForecast.toString());
+        //new getForecastData().execute(fiveDaysForecast.toString());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
@@ -395,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     advDescription = weather.description;
                 }
 
+                //if OpenWeather
                 setCityName(response.cityName);
                 setTemperature(response.main.temp);
                 setFeelsLike(response.main.feels_like);
@@ -410,6 +437,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setPressure(response.main.pressure);
                 setHumidity(response.main.humidity);
                 setVisibility(response.visibility);
+
+                //if Yr.no
+//                setCityName(response.cityName);
+//                setSunrise(response.sys.sunrise);
+//                setSunset(response.sys.sunset);
+//                setVisibility(response.visibility);
+
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -458,6 +492,71 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setRainPrepList(rainPrep);
                 setSnowPrepList(snowPrep);
             }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class getYrnoForecastData extends AsyncTask<String, Void, ForecastYr>{
+        private String json;
+        private ForecastYr response;
+
+        @Override
+        protected ForecastYr doInBackground(String... urls){
+            try{
+                json = RestAPIService.getStream(urls[0]);
+                Log.d("ddd", "getStreamYrNo");
+                Gson gson = new Gson();
+                response = gson.fromJson(json, ForecastYr.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(ForecastYr response){
+            try{
+                List<Timeseries> forecastList = response.timeseries;
+                ArrayList<String> dayTime = new ArrayList<>();
+                ArrayList<Double> temps = new ArrayList<>();
+                ArrayList<Double> rainPrep = new ArrayList<>();
+                ArrayList<Double> pressureList = new ArrayList<>();
+                ArrayList<Double> humidities = new ArrayList<>();
+                ArrayList<Double> windSpeeds = new ArrayList<>();
+                ArrayList<Double> windDirections = new ArrayList<>();
+                ArrayList<Double> max_temps = new ArrayList<>();
+                ArrayList<Double> min_temps = new ArrayList<>();
+
+                for (Timeseries weather : forecastList){
+                    dayTime.add(weather.time);
+                    temps.add(weather.data.instant.details.air_temperature);
+                    rainPrep.add(weather.data.next_6_hours.details.precipitation_amount);
+                    pressureList.add(weather.data.instant.details.air_pressure);
+                    humidities.add(weather.data.instant.details.relative_humidity);
+                    windSpeeds.add(weather.data.instant.details.wind_speed);
+                    windDirections.add(weather.data.instant.details.wind_from_direction);
+                    max_temps.add(weather.data.next_6_hours.details.air_temperature_max);
+                    min_temps.add(weather.data.next_6_hours.details.air_temperature_min);
+                }
+
+                //forecast
+                set_timeStrings(dayTime);
+                setTempsList(temps);
+                setRainPrepList(rainPrep);
+
+                //more info
+                setTemperature(temps.get(0));
+                setFeelsLike(temps.get(0));//no feels like data in yr.no json
+                setPressure(pressureList.get(0).intValue());
+                setHumidity(humidities.get(0).intValue());
+                setWindSpeed(windSpeeds.get(0).intValue());
+                setWindDegree(windDirections.get(0).intValue());
+                setTempMax(max_temps.get(0).intValue());
+                setTempMin(min_temps.get(0).intValue());
+
+            }catch(Exception e){
                 e.printStackTrace();
             }
         }
