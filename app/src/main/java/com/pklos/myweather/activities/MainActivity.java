@@ -7,12 +7,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +46,7 @@ import com.pklos.myweather.weatherforecast_yrno_model.Timeseries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //OpenWeather
@@ -66,6 +73,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String cityID;
     private StringBuilder fiveDaysForecast;
     private StringBuilder currentForecast;
+
+    private Context context;
+    private SharedPreferences sharedPreferences;
+    private String data_source;
+    private String language;
+
+    private Locale myLocale;
 
     private String forecastYrno;
 
@@ -248,6 +262,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
+//    private void setLanguage(String lang){
+//        myLocale = new Locale(lang);
+//        Resources res = getResources();
+//        DisplayMetrics dm = res.getDisplayMetrics();
+//        Configuration conf = res.getConfiguration();
+//        conf.locale = myLocale;
+//        res.updateConfiguration(conf, dm);
+//        Intent refresh = new Intent(this, MainActivity.class);
+//        startActivity(refresh);
+//    }
+
 //    private void insertInitialData(){
 //        final LocationsDB appDB = LocationsDB.getInstance(this);
 //        final Location location = new Location("Gdańsk", "7000000", true);
@@ -293,14 +318,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Yr.no default city - Gdańsk
         forecastYrno = "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=54.3&lon=18.5";
 
-        //if in preferences OpenWeather
-        //OpenWeather
-        new getJSONData().execute(currentForecast.toString());
-        new getForecastData().execute(fiveDaysForecast.toString());
+        //settings
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //if in preferences Yr.no
-        //new getJSONData().execute(currentForecast.toString());
-        //new getForecastData().execute(fiveDaysForecast.toString());
+        data_source = sharedPreferences.getString(getString(R.string.sp_key_data_source), "OPEN_WEATHER");
+        language = sharedPreferences.getString(getString(R.string.sp_key_language), "ENGLISH");
+
+        switch(language){
+            case "ENGLISH":
+                //setLocale('en');
+                break;
+
+            case "POLISH":
+                //setLocale('pl');
+                break;
+        }
+
+        switch(data_source){
+            case "OPEN_WEATHER"://if in preferences OpenWeather
+                new getJSONData().execute(currentForecast.toString());
+                new getForecastData().execute(fiveDaysForecast.toString());
+                break;
+            case "YR_NO"://if in preferences Yr.no
+                new getJSONData().execute(currentForecast.toString());
+                new getYrnoForecastData().execute(fiveDaysForecast.toString());
+                break;
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
