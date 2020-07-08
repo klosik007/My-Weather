@@ -3,39 +3,60 @@
 
     <PreferenceCategory
         app:key="chart_colors_category"
-        app:title="Chart Colors">
+        app:title="@string/chart_colors">
         <ListPreference
             app:key="@string/sp_key_precipitation_chart_color"
-            app:title="Precipitation Chart Color"
+            app:title="@string/precipitation_chart_color"
             app:defaultValue="#000000"
             app:entries="@array/chart_color_names"
             app:entryValues="@array/chart_color_values"
-            app:summary="Select precipitation chart color"
+            app:summary="precipitation_chat_color_summary"
             />
         <ListPreference
             app:key="@string/sp_key_temperature_chart_color"
-            app:title="Temperature Chart Color"
+            app:title="@string/temperature_chart_color"
             app:defaultValue="#3F48CC"
             app:entries="@array/chart_color_names"
             app:entryValues="@array/chart_color_values"
-            app:summary="Select temperature chart color"
+            app:summary="@string/temperature_chart_color_summary"
             />
     </PreferenceCategory>
 
     <PreferenceCategory
         app:key="chart_type_bar_category"
-        app:title="Chart Type - Precipitation">
+        app:title="@string/chart_type_precipitation">
         <ListPreference
             app:key="@string/sp_key_chart_type_precipitation"
-            app:title="Precipitation Chart Type"
+            app:title="@string/precipitation_chart_type"
             app:defaultValue="HORIZONTAL_BEZIER"
             app:entries="@array/chart_type_precipitation_names"
             app:entryValues="@array/chart_type_precipitation_values" />
 
     </PreferenceCategory>
+    <PreferenceCategory
+        app:key="data_source"
+        app:title="@string/data_source">
+        <ListPreference
+            app:key="@string/sp_key_data_source"
+            app:title="@string/select_data_source"
+            app:defaultValue="OPEN_WEATHER"
+            app:entries="@array/chart_color_names"
+            app:entryValues="@array/chart_color_values" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="language"
+        app:title="@string/language">
+        <ListPreference
+            app:key="@string/language"
+            app:title="@string/select_language"
+            app:defaultValue="ENGLISH"
+            app:entries="@array/languages"
+            app:entryValues="@array/languages_values"/>
+    </PreferenceCategory>
 
     <PreferenceCategory
         app:key="cities_to_delete"
-        app:title="Cities">
+        app:title="@string/cities">
     </PreferenceCategory>
 </PreferenceScreen>
