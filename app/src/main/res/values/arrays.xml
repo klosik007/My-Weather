@@ -1,10 +1,10 @@
 <resources>
     <!-- Reply Preference -->
     <string-array name="chart_type_precipitation_names">
-        <item>Horizontal Bezier</item>
-        <item>Cubic Bezier</item>
-        <item>Linear</item>
-        <item>Stepped</item>
+        <item>@string/horizontal_bezier</item>
+        <item>@string/cubic_bezier</item>
+        <item>@string/linear</item>
+        <item>@string/stepped</item>
     </string-array>
 
     <string-array name="chart_type_precipitation_values">
@@ -36,5 +36,25 @@
         <item>#C3C3C3</item>
         <item>#B97A56</item>
         <item>#FFF200</item>
+    </string-array>
+
+    <string-array name="data_sources">
+        <item>Open Weather</item>
+        <item>Yr.no</item>
+    </string-array>
+
+    <string-array name="data_sources_values">
+        <item>OPEN_WEATHER</item>
+        <item>YR_NO</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item>@string/english</item>
+        <item>@string/polish</item>
+    </string-array>
+
+    <string-array name="languages_values">
+        <item>ENGLISH</item>
+        <item>POLISH</item>
     </string-array>
 </resources>
