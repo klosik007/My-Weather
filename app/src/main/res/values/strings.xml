@@ -13,21 +13,21 @@
     <string name="wind_deg">Wind Degree</string>
     <string name="Visibility">Visibility</string>
     <string name="maxTempView">Max. Temp</string>
-    <string name="maxTemp">max_temp</string>
+    <string name="maxTemp" translatable="false">max_temp</string>
     <string name="minTempView">Min. Temp</string>
-    <string name="minTemp">min_temp</string>
+    <string name="minTemp" translatable="false">min_temp</string>
     <string name="current_temp">Temperature</string>
     <string name="feel_temp">Feels like</string>
     <string name="time_stamp">Update time:</string>
     <string name="main_description">Main Descript</string>
     <string name="adv_description">Adv Descript</string>
-    <string name="image_content_description">weather_img</string>
-    <string name="time">time</string>
-    <string name="feel">feel</string>
-    <string name="temp">temp</string>
+    <string name="image_content_description" translatable="false">weather_img</string>
+    <string name="time" translatable="false">time</string>
+    <string name="feel" translatable="false">feel</string>
+    <string name="temp" translatable="false">temp</string>
     <string name="add_location">Add Location</string>
-    <string name="drawerOpen">drawerOpen</string>
-    <string name="drawerClose">drawerClose</string>
+    <string name="drawerOpen" translatable="false">drawerOpen</string>
+    <string name="drawerClose" translatable="false">drawerClose</string>
     <string name="cityNameHint">Type City Name</string>
     <string name="button_searchCity">Search City</string>
     <string name="results_count">Results count: %1$d</string>
@@ -36,13 +36,43 @@
     <string name="added_city_alert">City Added!</string>
     <string name="touch_city_tip">Touch to Remove</string>
     <string name="on_city_remove">City Removed From List</string>
+    <string name="data_source">Data Source</string>
+    <string name="select_data_source">Select Data Source</string>
+    <string name="language">Language</string>
+    <string name="select_language">Select Language</string>
+    <string name="temperature_chart_color">Temperature Chart Color</string>
+    <string name="temperature_chart_color_summary">Select temperature chart color</string>
+    <string name="precipitation_chart_color">Precipitation Chart Color</string>
+    <string name="precipitation_chat_color_summary">Select precipitation chart color</string>
+    <string name="chart_colors">Chart Colors</string>
+    <string name="chart_type_precipitation">Chart Type - Precipitation</string>
+    <string name="precipitation_chart_type">Precipitation Chart Type</string>
+    <string name="cities">Cities</string>
+    <string name="horizontal_bezier">Horizontal Bezier</string>
+    <string name="cubic_bezier">Cubic Bezier</string>
+    <string name="linear">Linear</string>
+    <string name="stepped">Stepped</string>
+    <string name="white">White</string>
+    <string name="black">Black</string>
+    <string name="blue">Blue</string>
+    <string name="green">Green</string>
+    <string name="purple">Purple</string>
+    <string name="red">Red</string>
+    <string name="silver">Silver</string>
+    <string name="brown">Brown</string>
+    <string name="yellow">Yellow</string>
+    <string name="english">English</string>
+    <string name="polish">Polish</string>
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
 
     <!--SharedPreferences keys-->
-    <string name="sp_key_chart_type_precipitation">chartTypePrecipitation</string>
-    <string name="sp_key_precipitation_chart_color">precipitationChartColor</string>
-    <string name="sp_key_temperature_chart_color">temperatureChartColor</string>
+    <string name="sp_key_chart_type_precipitation" translatable="false">chartTypePrecipitation</string>
+    <string name="sp_key_precipitation_chart_color" translatable="false">precipitationChartColor</string>
+    <string name="sp_key_temperature_chart_color" translatable="false">temperatureChartColor</string>
+    <string name="sp_key_data_source" translatable="false">dataSource</string>
+    <string name="sp_key_language" translatable="false">language</string>
+
 
 </resources>
