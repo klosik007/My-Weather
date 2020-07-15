@@ -1,5 +1,6 @@
 package com.pklos.myweather.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -8,6 +9,7 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.pklos.myweather.R;
+import com.pklos.myweather.activities.MainActivity;
 import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
@@ -36,6 +38,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         public boolean onPreferenceClick(Preference preference) {
                             LocalDBUtils.deleteDataFromDB(getContext(), location);
                             Toast.makeText(getContext(), R.string.on_city_remove, Toast.LENGTH_SHORT).show();
+                            Intent refresh = new Intent(getContext(), MainActivity.class);
+                            startActivity(refresh);
                             return true;
                         }
                     });
