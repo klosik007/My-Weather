@@ -10,15 +10,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,8 +37,6 @@ import com.pklos.myweather.R;
 import com.pklos.myweather.utils.RestAPIService;
 import com.pklos.myweather.weatherforecast_openweather_model.Weather;
 import com.pklos.myweather.weatherforecast_openweather_model._List;
-import com.pklos.myweather.weatherforecast_yrno_model.ForecastYr;
-import com.pklos.myweather.weatherforecast_yrno_model.Timeseries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static String _city = "";
     private static double _temp = 0;
     private static long _timeFrom = 0L;
-    private static String _mainWindDescription = "";
+    private static String _weatherIcon = "";
     private static String _advWindDescription = "";
     private static double _windSpeed = 0;
     private static int _windDegree = 0;
@@ -74,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private StringBuilder fiveDaysForecast;
     private StringBuilder currentForecast;
 
-    private Context context;
+    //private Context context;
     private SharedPreferences sharedPreferences;
-    private String data_source;
+    //private String data_source;
     private String language;
 
     private Locale myLocale;
 
-    private String forecastYrno;
+    //private String forecastYrno;
 
     public static String getCityName() {
         return _city;
@@ -99,9 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return _timeFrom;
     }
 
-    public static String getWindMainDescription() {
-        return _mainWindDescription;
-    }
+    public static String getWeatherIcon() { return _weatherIcon; }
 
     public static String getWindAdvDescription() {
         return _advWindDescription;
@@ -159,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return _snowPreps;
     }
 
+    //---------------------------------------------------------------------------
+
     public static void setCityName(String city) {
         _city = city;
     }
@@ -175,11 +169,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _timeFrom = timeFrom;
     }
 
-    public static void setWindMainDescription(String mainDescription) {
-        _mainWindDescription = mainDescription;
+    public static void setWeatherIconURLStr(String weatherIcon) {
+        _weatherIcon = weatherIcon;
     }
 
-    public static void setWindAdvDescription(String advDescription) {
+    public static void setWeatherAdvDescription(String advDescription) {
         _advWindDescription = advDescription;
     }
 
@@ -237,13 +231,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     //yr.no
-    private static ArrayList<String> _timeStrings = new ArrayList<>();
-    public static ArrayList<String> get_timeStrings() {
-        return _timeStrings;
-    }
-    public static void set_timeStrings(ArrayList<String> _timeStrings) {
-        MainActivity._timeStrings = _timeStrings;
-    }
+//    private static ArrayList<String> _timeStrings = new ArrayList<>();
+//    public static ArrayList<String> get_timeStrings() {
+//        return _timeStrings;
+//    }
+//    public static void set_timeStrings(ArrayList<String> _timeStrings) {
+//        MainActivity._timeStrings = _timeStrings;
+//    }
 
     //navigation
     DrawerLayout drawerLayout;
@@ -315,13 +309,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .append(cityID)
                 .append("&appid=50768df1f9a4be14d70a612605801e5c");
 
+        new getJSONData().execute(currentForecast.toString());
+        new getForecastData().execute(fiveDaysForecast.toString());
+
         //Yr.no default city - Gdańsk
-        forecastYrno = "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=54.3&lon=18.5";
+        //forecastYrno = "http://api.met.no/weatherapi/locationforecast/2.0/complete?lat=54.3&lon=18.5";
 
         //settings
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        data_source = sharedPreferences.getString(getString(R.string.sp_key_data_source), "OPEN_WEATHER");
+        //data_source = sharedPreferences.getString(getString(R.string.sp_key_data_source), "OPEN_WEATHER");
         language = sharedPreferences.getString(getString(R.string.sp_key_language), "ENGLISH");
 
         switch(language){
@@ -334,16 +331,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        switch(data_source){
-            case "OPEN_WEATHER"://if in preferences OpenWeather
-                new getJSONData().execute(currentForecast.toString());
-                new getForecastData().execute(fiveDaysForecast.toString());
-                break;
-            case "YR_NO"://if in preferences Yr.no
-                new getJSONData().execute(currentForecast.toString());
-                new getYrnoForecastData().execute(fiveDaysForecast.toString());
-                break;
-        }
+//        switch(data_source){
+//            case "OPEN_WEATHER"://if in preferences OpenWeather
+//                new getJSONData().execute(currentForecast.toString());
+//                new getForecastData().execute(fiveDaysForecast.toString());
+//                break;
+//            case "YR_NO"://if in preferences Yr.no
+//                new getJSONData().execute(currentForecast.toString());
+//                new getYrnoForecastData().execute(forecastYrno);
+//                break;
+//        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
@@ -393,7 +390,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .beginTransaction()
                 .replace(R.id.view_pager, new HomeFragment())
                 .commit();
-        //transactFragment(new HomeFragment(), true);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavListener =
@@ -458,10 +454,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(MainParameters response){
             try{
                 List<Weather> weatherDescription = response.weather;
-                String mainDescription = "", advDescription = "";
+                String icon = "", advDescription = "";
                 for (Weather weather : weatherDescription){
-                    mainDescription = weather.main;
                     advDescription = weather.description;
+                    icon = weather.icon;
                 }
 
                 //if OpenWeather
@@ -469,8 +465,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setTemperature(response.main.temp);
                 setFeelsLike(response.main.feels_like);
                 setTimeFrom(response.daytime);
-                setWindMainDescription(mainDescription);
-                setWindAdvDescription(advDescription);
+                setWeatherAdvDescription(advDescription);
+                setWeatherIconURLStr(icon);
                 setWindSpeed(response.wind.windSpeed);
                 setWindDegree(response.wind.windDegree);
                 setTempMax(response.main.temp_max);
@@ -534,74 +530,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setTempsList(temps);
                 setRainPrepList(rainPrep);
                 setSnowPrepList(snowPrep);
+
+                transactFragment(new HomeFragment(), true);
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    private class getYrnoForecastData extends AsyncTask<String, Void, ForecastYr>{
-        private String json;
-        private ForecastYr response;
-
-        @Override
-        protected ForecastYr doInBackground(String... urls){
-            try{
-                json = RestAPIService.getStream(urls[0]);
-                Log.d("ddd", "getStreamYrNo");
-                Gson gson = new Gson();
-                response = gson.fromJson(json, ForecastYr.class);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(ForecastYr response){
-            try{
-                List<Timeseries> forecastList = response.timeseries;
-                ArrayList<String> dayTime = new ArrayList<>();
-                ArrayList<Double> temps = new ArrayList<>();
-                ArrayList<Double> rainPrep = new ArrayList<>();
-                ArrayList<Double> pressureList = new ArrayList<>();
-                ArrayList<Double> humidities = new ArrayList<>();
-                ArrayList<Double> windSpeeds = new ArrayList<>();
-                ArrayList<Double> windDirections = new ArrayList<>();
-                ArrayList<Double> max_temps = new ArrayList<>();
-                ArrayList<Double> min_temps = new ArrayList<>();
-
-                for (Timeseries weather : forecastList){
-                    dayTime.add(weather.time);
-                    temps.add(weather.data.instant.details.air_temperature);
-                    rainPrep.add(weather.data.next_6_hours.details.precipitation_amount);
-                    pressureList.add(weather.data.instant.details.air_pressure);
-                    humidities.add(weather.data.instant.details.relative_humidity);
-                    windSpeeds.add(weather.data.instant.details.wind_speed);
-                    windDirections.add(weather.data.instant.details.wind_from_direction);
-                    max_temps.add(weather.data.next_6_hours.details.air_temperature_max);
-                    min_temps.add(weather.data.next_6_hours.details.air_temperature_min);
-                }
-
-                //forecast
-                set_timeStrings(dayTime);
-                setTempsList(temps);
-                setRainPrepList(rainPrep);
-
-                //more info
-                setTemperature(temps.get(0));
-                setFeelsLike(temps.get(0));//no feels like data in yr.no json
-                setPressure(pressureList.get(0).intValue());
-                setHumidity(humidities.get(0).intValue());
-                setWindSpeed(windSpeeds.get(0).intValue());
-                setWindDegree(windDirections.get(0).intValue());
-                setTempMax(max_temps.get(0).intValue());
-                setTempMin(min_temps.get(0).intValue());
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class getYrnoForecastData extends AsyncTask<String, Void, ForecastYr>{
+//        private String json;
+//        private ForecastYr response;
+//
+//        @Override
+//        protected ForecastYr doInBackground(String... urls){
+//            try{
+//                json = RestAPIService.getStream(urls[0]);
+//                Log.d("ddd", "getStreamYrNo");
+//                Gson gson = new Gson();
+//                response = gson.fromJson(json, ForecastYr.class);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//
+//            return response;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ForecastYr response){
+//            try{
+//                List<Timeseries> forecastList = response.timeseries;
+//                ArrayList<String> dayTime = new ArrayList<>();
+//                ArrayList<Double> temps = new ArrayList<>();
+//                ArrayList<Double> rainPrep = new ArrayList<>();
+//                ArrayList<Double> pressureList = new ArrayList<>();
+//                ArrayList<Double> humidities = new ArrayList<>();
+//                ArrayList<Double> windSpeeds = new ArrayList<>();
+//                ArrayList<Double> windDirections = new ArrayList<>();
+//                ArrayList<Double> max_temps = new ArrayList<>();
+//                ArrayList<Double> min_temps = new ArrayList<>();
+//
+//                for (Timeseries weather : forecastList){
+//                    dayTime.add(weather.time);
+//                    temps.add(weather.data.instant.details.air_temperature);
+//                    rainPrep.add(weather.data.next_6_hours.details.precipitation_amount);
+//                    pressureList.add(weather.data.instant.details.air_pressure);
+//                    humidities.add(weather.data.instant.details.relative_humidity);
+//                    windSpeeds.add(weather.data.instant.details.wind_speed);
+//                    windDirections.add(weather.data.instant.details.wind_from_direction);
+//                    max_temps.add(weather.data.next_6_hours.details.air_temperature_max);
+//                    min_temps.add(weather.data.next_6_hours.details.air_temperature_min);
+//                }
+//
+//                //forecast
+//                set_timeStrings(dayTime);
+//                setTempsList(temps);
+//                setRainPrepList(rainPrep);
+//
+//                //more info
+//                setTemperature(temps.get(0));
+//                setFeelsLike(temps.get(0));//no feels like data in yr.no json
+//                setPressure(pressureList.get(0).intValue());
+//                setHumidity(humidities.get(0).intValue());
+//                setWindSpeed(windSpeeds.get(0).intValue());
+//                setWindDegree(windDirections.get(0).intValue());
+//                setTempMax(max_temps.get(0).intValue());
+//                setTempMin(min_temps.get(0).intValue());
+//
+//            }catch(Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }
