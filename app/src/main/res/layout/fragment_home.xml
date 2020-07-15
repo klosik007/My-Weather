@@ -72,7 +72,7 @@
         android:textSize="30sp" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/weatherIconImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/current_temp"
@@ -85,7 +85,7 @@
         android:id="@+id/adv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/weatherIconImg"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="@string/adv_description"
