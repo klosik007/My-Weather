@@ -1,14 +1,20 @@
 package com.pklos.myweather.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.pklos.myweather.R;
 import com.pklos.myweather.activities.MainActivity;
@@ -19,16 +25,17 @@ public class HomeFragment extends Fragment {
     TextView temperature;
     TextView feelsLike;
     TextView time;
-    TextView mainDescription;
     TextView advDescription;
+    ImageView weatherIconImg;
 
     String cityName;
     int temp;
     int feelTemp;
     long timeStamp;
     String timeStampConverted = "";
-    String mainDesc = "";
     String advDesc = "";
+    String icon = "";
+
 
     @Nullable
     @Override
@@ -43,11 +50,9 @@ public class HomeFragment extends Fragment {
         temperature = (TextView)view.findViewById(R.id.current_temp);
         feelsLike = (TextView)view.findViewById(R.id.feels_like);
         time = (TextView)view.findViewById(R.id.time_stamp);
-        //mainDescription = (TextView)view.findViewById(R.id.main_description);
         advDescription = (TextView)view.findViewById(R.id.adv_description);
+        weatherIconImg = (ImageView)view.findViewById(R.id.weatherIconImg);
 
-//        mainParameters = MainActivity.getMainParameters();
-//        Log.d("mainParams", mainParameters.getCityName());
         temp = (int)(Math.round(MainActivity.getTemp() - 273.15));
         temperature.setText(String.valueOf(temp));
 
@@ -61,8 +66,12 @@ public class HomeFragment extends Fragment {
         timeStampConverted = TimeStampConverter.ConvertTimeStampToDate(timeStamp);
         time.setText(timeStampConverted);
 
-//        mainDesc = MainActivity.getMainDescription();
-//        mainDescription.setText(mainDesc);
+        icon = MainActivity.getWeatherIcon();
+        StringBuilder weatherIconURL = new StringBuilder("http://openweathermap.org/img/wn/")
+                .append(icon)
+                .append("@4x.png");
+        //weatherIconImg.set
+
 
         advDesc = MainActivity.getWindAdvDescription();
         advDescription.setText(advDesc);
