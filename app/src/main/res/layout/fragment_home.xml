@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -78,8 +78,9 @@
         android:layout_below="@+id/current_temp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        app:srcCompat="@drawable/ic_launcher_background"
-        android:contentDescription="@string/image_content_description" />
+        android:contentDescription="@string/image_content_description"
+        android:scaleType="center"
+        app:srcCompat="@color/design_default_color_background" />
 
     <TextView
         android:id="@+id/adv_description"
