@@ -2,6 +2,8 @@ package com.pklos.myweather.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.pklos.myweather.R;
 import com.pklos.myweather.activities.MainActivity;
+import com.pklos.myweather.utils.RestAPIService;
 import com.pklos.myweather.utils.TimeStampConverter;
 
 public class HomeFragment extends Fragment {
@@ -35,6 +38,7 @@ public class HomeFragment extends Fragment {
     String timeStampConverted = "";
     String advDesc = "";
     String icon = "";
+    Bitmap weatherBitmap;
 
 
     @Nullable
@@ -62,16 +66,15 @@ public class HomeFragment extends Fragment {
         feelTemp = (int)(Math.round(MainActivity.getFeelsLike() - 273.15));
         feelsLike.setText(String.valueOf(feelTemp));
 
-        timeStamp = MainActivity.getTimeFrom();
-        timeStampConverted = TimeStampConverter.ConvertTimeStampToDate(timeStamp);
-        time.setText(timeStampConverted);
-
         icon = MainActivity.getWeatherIcon();
         StringBuilder weatherIconURL = new StringBuilder("http://openweathermap.org/img/wn/")
                 .append(icon)
                 .append("@4x.png");
-        //weatherIconImg.set
+        new getWeatherIcon().execute(weatherIconURL.toString());
 
+        timeStamp = MainActivity.getTimeFrom();
+        timeStampConverted = TimeStampConverter.ConvertTimeStampToDate(timeStamp);
+        time.setText(timeStampConverted);
 
         advDesc = MainActivity.getWindAdvDescription();
         advDescription.setText(advDesc);
@@ -89,5 +92,29 @@ public class HomeFragment extends Fragment {
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+    }
+
+    private class getWeatherIcon extends AsyncTask<String, Void, Bitmap> {
+        private Bitmap bitmap;
+
+        @Override
+        protected Bitmap doInBackground(String... urls){
+            try{
+                bitmap = RestAPIService.getBitmapfromUrl(urls[0]);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap){
+            try{
+                weatherIconImg.setImageBitmap(bitmap);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
