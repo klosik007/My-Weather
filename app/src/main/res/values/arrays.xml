@@ -15,15 +15,15 @@
     </string-array>
 
     <string-array name="chart_color_names">
-        <item>White</item>
-        <item>Black</item>
-        <item>Blue</item>
-        <item>Green</item>
-        <item>Purple</item>
-        <item>Red</item>
-        <item>Silver</item>
-        <item>Brown</item>
-        <item>Yellow</item>
+        <item>@string/white</item>
+        <item>@string/black</item>
+        <item>@string/blue</item>
+        <item>@string/green</item>
+        <item>@string/purple</item>
+        <item>@string/red</item>
+        <item>@string/silver</item>
+        <item>@string/brown</item>
+        <item>@string/yellow</item>
     </string-array>
 
     <string-array name="chart_color_values">
