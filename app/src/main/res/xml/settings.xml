@@ -10,7 +10,7 @@
             app:defaultValue="#000000"
             app:entries="@array/chart_color_names"
             app:entryValues="@array/chart_color_values"
-            app:summary="precipitation_chat_color_summary"
+            app:summary="@string/precipitation_chat_color_summary"
             />
         <ListPreference
             app:key="@string/sp_key_temperature_chart_color"
@@ -48,7 +48,7 @@
         app:key="language"
         app:title="@string/language">
         <ListPreference
-            app:key="@string/language"
+            app:key="@string/sp_key_language"
             app:title="@string/select_language"
             app:defaultValue="ENGLISH"
             app:entries="@array/languages"
