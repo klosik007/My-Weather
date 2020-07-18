@@ -56,4 +56,6 @@
     <string name="select_language">Wybierz język</string>
     <string name="language">Język</string>
     <string name="data_source">Źródło danych</string>
+    <string name="date_table">Data</string>
+    <string name="precipitation">Opad</string>
 </resources>
