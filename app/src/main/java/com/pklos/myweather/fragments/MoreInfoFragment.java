@@ -68,19 +68,19 @@ public class MoreInfoFragment extends Fragment {
         sunsetText.setText(TimeStampConverter.ConvertTimeStampToDate(sunset));
 
         pressure = MainActivity.getPressure();
-        StringBuilder pressureTextBuilder = new StringBuilder().append("Pressure: ").append(pressure).append(" hPa");
+        StringBuilder pressureTextBuilder = new StringBuilder().append(getResources().getString(R.string.pressure)).append(": ").append(pressure).append(" hPa");
         pressureText.setText(pressureTextBuilder);
 
         humidity = MainActivity.getHumidity();
-        StringBuilder humidityTextBuilder = new StringBuilder().append("Humidity: ").append(humidity).append("%");
+        StringBuilder humidityTextBuilder = new StringBuilder().append(getResources().getString(R.string.humidity)).append(": ").append(humidity).append("%");
         humidityText.setText(humidityTextBuilder);
 
         windSpeed = MainActivity.getWindSpeed();
-        StringBuilder windSpeedTextBuilder = new StringBuilder().append("Speed: ").append(windSpeed).append(" m/s");
+        StringBuilder windSpeedTextBuilder = new StringBuilder().append(getResources().getString(R.string.wind_speed)).append(": ").append(windSpeed).append(" m/s");
         windSpeedText.setText(windSpeedTextBuilder);
 
         windDegree = MainActivity.getWindDegree();
-        StringBuilder windDegreeTextBuilder = new StringBuilder().append("Degree: ").append(windDegree);
+        StringBuilder windDegreeTextBuilder = new StringBuilder().append(getResources().getString(R.string.wind_deg)).append(": ").append(windDegree);
         windDegreeText.setText(windDegreeTextBuilder);
 
         visibility = MainActivity.getVisibility();
