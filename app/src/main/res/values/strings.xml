@@ -63,6 +63,8 @@
     <string name="yellow">Yellow</string>
     <string name="english">English</string>
     <string name="polish">Polish</string>
+    <string name="date_table">Date</string>
+    <string name="precipitation">Precipitation</string>
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
@@ -72,7 +74,7 @@
     <string name="sp_key_precipitation_chart_color" translatable="false">precipitationChartColor</string>
     <string name="sp_key_temperature_chart_color" translatable="false">temperatureChartColor</string>
     <string name="sp_key_data_source" translatable="false">dataSource</string>
-    <string name="sp_key_language" translatable="false">language</string>
+    <string name="sp_key_language" translatable="false">languageChange</string>
 
 
 </resources>
