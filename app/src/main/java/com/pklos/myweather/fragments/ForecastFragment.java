@@ -189,7 +189,7 @@ public class ForecastFragment extends Fragment {
             entries.add(new BarEntry(i + 0.5f, precipitation));
         }
 
-        BarDataSet set = new BarDataSet(entries, "Precipitation");
+        BarDataSet set = new BarDataSet(entries, getResources().getString(R.string.precipitation));
         set.setColor(Color.parseColor(precipitationChartColor));
         set.setValueTextColor(Color.parseColor(precipitationChartColor));
         set.setValueTextSize(8.0f);
@@ -211,7 +211,7 @@ public class ForecastFragment extends Fragment {
             entries.add(new Entry(index + 0.5f,  Math.round(temps.get(index) - 273.15f)));
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Temperatures");
+        LineDataSet dataSet = new LineDataSet(entries, getResources().getString(R.string.current_temp));
         dataSet.setColor(Color.parseColor(temperatureChartColor));
         dataSet.setLineWidth(3.0f);
         dataSet.setCircleColor(Color.parseColor(temperatureChartColor));
