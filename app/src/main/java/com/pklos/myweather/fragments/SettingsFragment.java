@@ -38,8 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         public boolean onPreferenceClick(Preference preference) {
                             LocalDBUtils.deleteDataFromDB(getContext(), location);
                             Toast.makeText(getContext(), R.string.on_city_remove, Toast.LENGTH_SHORT).show();
-                            Intent refresh = new Intent(getContext(), MainActivity.class);
-                            startActivity(refresh);
+                            refreshMainActivity();
                             return true;
                         }
                     });
@@ -47,5 +46,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }
             }
         });
+
+        final PreferenceCategory languageCategory = (PreferenceCategory) findPreference("language");
+        Preference languageCategoryPref1 = languageCategory.getPreference(0);
+        languageCategoryPref1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                refreshMainActivity();
+                return true;
+            }
+        });
+    }
+
+    private void refreshMainActivity(){
+        Intent refresh = new Intent(getContext(), MainActivity.class);
+        startActivity(refresh);
     }
 }
