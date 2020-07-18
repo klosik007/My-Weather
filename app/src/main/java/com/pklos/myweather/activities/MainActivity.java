@@ -10,11 +10,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences sharedPreferences;
     //private String data_source;
     private String language;
-
-    private Locale myLocale;
 
     //private String forecastYrno;
 
@@ -229,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _snowPreps = snowPreps;
     }
 
-
     //yr.no
 //    private static ArrayList<String> _timeStrings = new ArrayList<>();
 //    public static ArrayList<String> get_timeStrings() {
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
-    public void transactFragment(Fragment fragment, boolean reload) {
+    private void transactFragment(Fragment fragment, boolean reload) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         if (reload) {
@@ -256,16 +257,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
-//    private void setLanguage(String lang){
-//        myLocale = new Locale(lang);
-//        Resources res = getResources();
-//        DisplayMetrics dm = res.getDisplayMetrics();
-//        Configuration conf = res.getConfiguration();
-//        conf.locale = myLocale;
-//        res.updateConfiguration(conf, dm);
-//        Intent refresh = new Intent(this, MainActivity.class);
-//        startActivity(refresh);
-//    }
+    private void setLanguage(String lang){
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+    }
 
 //    private void insertInitialData(){
 //        final LocationsDB appDB = LocationsDB.getInstance(this);
@@ -295,6 +294,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //settings
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //data_source = sharedPreferences.getString(getString(R.string.sp_key_data_source), "OPEN_WEATHER");
+        language = sharedPreferences.getString(getString(R.string.sp_key_language),"ENGLISH");
+        switch(language){
+            case "ENGLISH":
+                setLanguage("en");
+                break;
+            case "POLISH":
+                setLanguage("pl");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + language);
+        }
+
         setContentView(R.layout.activity_main);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -314,22 +328,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Yr.no default city - Gdańsk
         //forecastYrno = "http://api.met.no/weatherapi/locationforecast/2.0/complete?lat=54.3&lon=18.5";
-
-        //settings
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //data_source = sharedPreferences.getString(getString(R.string.sp_key_data_source), "OPEN_WEATHER");
-        language = sharedPreferences.getString(getString(R.string.sp_key_language), "ENGLISH");
-
-        switch(language){
-            case "ENGLISH":
-                //setLocale('en');
-                break;
-
-            case "POLISH":
-                //setLocale('pl');
-                break;
-        }
 
 //        switch(data_source){
 //            case "OPEN_WEATHER"://if in preferences OpenWeather
@@ -357,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
-        final SubMenu subMenu = menu.addSubMenu(0, 0, 0, "Locations");
+        final SubMenu subMenu = menu.addSubMenu(0, 0, 0, getResources().getString(R.string.cities));
         final LocationsDB appDB = LocationsDB.getInstance(this);
 
 
@@ -537,7 +535,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-
 //    private class getYrnoForecastData extends AsyncTask<String, Void, ForecastYr>{
 //        private String json;
 //        private ForecastYr response;
