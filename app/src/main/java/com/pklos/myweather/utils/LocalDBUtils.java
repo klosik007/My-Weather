@@ -10,6 +10,10 @@ import com.pklos.myweather.locations_model.Location;
 import java.util.List;
 
 public class LocalDBUtils {
+    private static volatile String id;
+
+    public static String getDefaultCityId(){ return id;}
+
     public static void insertDataToDB(Context context, int id, String cityName){
         final LocationsDB appDB = LocationsDB.getInstance(context);
         final Location location = new Location(cityName, String.valueOf(id), false);
@@ -31,16 +35,34 @@ public class LocalDBUtils {
         });
     }
 
-    public static void fetchLocationsData(Context context){
+    public static void fetchDefaultCityID(Context context){
         final LocationsDB appDB = LocationsDB.getInstance(context);
 
         MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
             @Override
             public void run() {
-                final List<Location> locations = appDB.locationsDao().getLocationsList();
-                for (Location location : locations){
-                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
-                }
+                id = appDB.locationsDao().getDefaultLocation(true);
+                Log.d("defaultloc", id);
+            }
+        });
+    }
+
+    public static void updateDefaultCityDataInDB(Context context, final int id, final boolean setDefault){
+        final LocationsDB appDB = LocationsDB.getInstance(context);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                appDB.locationsDao().updateDefaultCity(setDefault, id);
+            }
+        });
+    }
+
+    public static void updateIsDefaultDataInDBToFalse(Context context){
+        final LocationsDB appDB = LocationsDB.getInstance(context);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                appDB.locationsDao().updateIsDefaultToFalse(false);
             }
         });
     }
