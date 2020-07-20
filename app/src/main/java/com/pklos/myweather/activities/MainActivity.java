@@ -33,6 +33,7 @@ import com.pklos.myweather.fragments.ForecastFragment;
 import com.pklos.myweather.locations_database.LocationsDB;
 import com.pklos.myweather.locations_database.MyWeatherExecutors;
 import com.pklos.myweather.locations_model.Location;
+import com.pklos.myweather.utils.LocalDBUtils;
 import com.pklos.myweather.weatherforecast_openweather_model.ForecastParams;
 import com.pklos.myweather.fragments.HomeFragment;
 import com.pklos.myweather.weatherforecast_openweather_model.MainParameters;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static ArrayList<Double> _rainPreps = new ArrayList<>();
     private static ArrayList<Double> _snowPreps = new ArrayList<>();
 
+    private int idInBase;
     private String cityID;
     private StringBuilder fiveDaysForecast;
     private StringBuilder currentForecast;
@@ -277,18 +279,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        });
 //    }
 //
-//    private void fetchLocationsData(){
-//        final LocationsDB appDB = LocationsDB.getInstance(this);
-//        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
-//            @Override
-//            public void run() {
-//                final List<Location> locations = appDB.locationsDao().getLocationsList();
-//                for (Location location : locations){
-//                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
-//                }
-//            }
-//        });
-//    }
+    private void fetchLocationsData(){
+        final LocationsDB appDB = LocationsDB.getInstance(this);
+        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
+            @Override
+            public void run() {
+                final List<Location> locations = appDB.locationsDao().getLocationsList();
+                for (Location location : locations){
+                    Log.d("Locations", location.getId() + location.getCityName() + location.getCityID() + location.isDefault());
+                }
+            }
+        });
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -316,6 +318,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //OpenWeather
         //default cityID
         cityID = "3099434";//Gdańsk
+        //LocalDBUtils.fetchDefaultCityID(getApplicationContext());
+        //String cityID2 = LocalDBUtils.getDefaultCityId();
+
         fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
                 .append(cityID)
                 .append("&appid=50768df1f9a4be14d70a612605801e5c");
@@ -369,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             cityID = location.getCityID();
+                            idInBase = location.getId();
                             fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
                                     .append(cityID)
                                     .append("&appid=50768df1f9a4be14d70a612605801e5c");
@@ -377,6 +383,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     .append("&appid=50768df1f9a4be14d70a612605801e5c");
                             new getJSONData().execute(currentForecast.toString());
                             new getForecastData().execute(fiveDaysForecast.toString());
+
+                            LocalDBUtils.updateIsDefaultDataInDBToFalse(getApplicationContext());
+                            LocalDBUtils.updateDefaultCityDataInDB(getApplicationContext(), idInBase, true);
                             return true;
                         }
                     });
@@ -388,6 +397,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .beginTransaction()
                 .replace(R.id.view_pager, new HomeFragment())
                 .commit();
+
+        fetchLocationsData();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavListener =
