@@ -75,6 +75,7 @@
     <string name="sp_key_temperature_chart_color" translatable="false">temperatureChartColor</string>
     <string name="sp_key_data_source" translatable="false">dataSource</string>
     <string name="sp_key_language" translatable="false">languageChange</string>
+    <string name="sp_default_city_id" translatable="false">defaultCityId</string>
 
 
 </resources>
