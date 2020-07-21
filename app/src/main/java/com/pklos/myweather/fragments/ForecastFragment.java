@@ -60,7 +60,7 @@ public class ForecastFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_forecast, container, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    //@RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         dts = MainActivity.getDtList();
@@ -156,7 +156,7 @@ public class ForecastFragment extends Fragment {
                 date.setTextColor(Color.BLACK);
                 date.setPadding(5, 5, 5, 5);
                 date.setGravity(11); //11 - center
-                date.setTextAppearance(android.R.style.TextAppearance_Large);
+                date.setTextAppearance(context, android.R.style.TextAppearance_Large);
                 tableRow.addView(date, tableRowsParams);
 
                 TextView temp = new TextView(getContext());
@@ -165,7 +165,7 @@ public class ForecastFragment extends Fragment {
                 temp.setTextColor(Color.BLACK);
                 temp.setPadding(5, 5, 5, 5);
                 temp.setGravity(11);
-                temp.setTextAppearance(android.R.style.TextAppearance_Large);
+                temp.setTextAppearance(context, android.R.style.TextAppearance_Large);
                 tableRow.addView(temp, tableRowsParams);
 
                 TextView precip = new TextView(getContext());
@@ -174,7 +174,7 @@ public class ForecastFragment extends Fragment {
                 precip.setTextColor(Color.BLACK);
                 precip.setPadding(5, 5, 5, 5);
                 precip.setGravity(11);
-                precip.setTextAppearance(android.R.style.TextAppearance_Large);
+                precip.setTextAppearance(context, android.R.style.TextAppearance_Large);
                 tableRow.addView(precip, tableRowsParams);
             }
             table.addView(tableRow, tableParams);
