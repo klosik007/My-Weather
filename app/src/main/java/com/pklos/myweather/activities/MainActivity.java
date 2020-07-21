@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         res.updateConfiguration(conf, dm);
     }
 
-//    private void insertInitialData(){
+    //    private void insertInitialData(){
 //        final LocationsDB appDB = LocationsDB.getInstance(this);
 //        final Location location = new Location("Gdańsk", "7000000", true);
 //        MyWeatherExecutors.getInstance().getDiskIO().execute(new Runnable(){
@@ -317,15 +318,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //OpenWeather
         //default cityID
-        cityID = "3099434";//Gdańsk
-        //LocalDBUtils.fetchDefaultCityID(getApplicationContext());
+        //cityID = "3099434";//Gdańsk
+        LocalDBUtils.fetchDefaultCityID(getApplicationContext());
         //String cityID2 = LocalDBUtils.getDefaultCityId();
+        String cityID2 = sharedPreferences.getString(getString(R.string.sp_default_city_id), "3099434");
 
         fiveDaysForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast?id=")
-                .append(cityID)
+                .append(cityID2)
                 .append("&appid=50768df1f9a4be14d70a612605801e5c");
         currentForecast = new StringBuilder("http://api.openweathermap.org/data/2.5/weather?id=")
-                .append(cityID)
+                .append(cityID2)
                 .append("&appid=50768df1f9a4be14d70a612605801e5c");
 
         new getJSONData().execute(currentForecast.toString());
