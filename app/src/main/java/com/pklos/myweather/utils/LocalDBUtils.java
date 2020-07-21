@@ -65,7 +65,7 @@ public class LocalDBUtils {
             @Override
             public void run() {
                 String _id = appDB.locationsDao().getDefaultLocation(true);
-                Log.d("defaultloc", _id);
+                //Log.d("defaultloc", _id);
                 editor.putString(context.getString(R.string.sp_default_city_id), _id);
                 editor.commit();
             }
