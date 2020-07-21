@@ -41,3 +41,9 @@ __ver.0.4.2__
 __ver.0.4.3__
 * Places deletable in Settings 
 * icons in Settings
+
+**21 July 2020**
+__ver.0.4.4__
+* weather icon in Home screen
+* translation to Polish available, language to be set in Settings
+* default city saves to local DB and loaded on app start
